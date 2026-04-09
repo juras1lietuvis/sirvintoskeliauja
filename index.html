@@ -3,154 +3,286 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Širvintos keliauja</title>
-<meta name="theme-color" content="#1a3a1a">
-<meta name="description" content="Širvintų rajono miesteliai – pažink žaisdamas. Interaktyvūs QR maršrutai.">
+<title>Briedžių Takas</title>
+<meta name="theme-color" content="#1a2e1a">
+<meta name="description" content="Interaktyvus turistinis maršrutas Kernavėje ir Širvintose.">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --forest: #1a2e1a;
-  --moss: #2d4a2d;
-  --fern: #4a7c4a;
-  --sage: #8fb88f;
-  --cream: #f5f0e8;
-  --amber: #d4872a;
-  --gold: #f0b840;
-}
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var(--cream); min-height: 100vh; }
-
-/* HEADER */
-.header { text-align: center; padding: 2rem 1.5rem 1.5rem; }
-.header-inner { display: inline-flex; flex-direction: column; align-items: center; gap: 0.75rem; }
-.herbas { width: 64px; height: auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); }
-.site-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--cream); line-height: 1.1; }
-.site-sub { font-size: 0.85rem; color: var(--sage); letter-spacing: 0.06em; }
-
-/* GRID */
-.grid-wrap { padding: 0 1rem 2rem; max-width: 520px; margin: 0 auto; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: 16px;
-  padding: 1rem;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, transform 0.15s;
-  text-decoration: none;
-  display: block;
-  color: inherit;
-}
-.card:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
-.card.soon { opacity: 0.42; cursor: default; pointer-events: none; }
-
-.card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
-.card-name { font-weight: 500; font-size: 1rem; color: var(--cream); }
-.card-desc { font-size: 0.75rem; color: var(--sage); margin-top: 0.2rem; line-height: 1.4; }
-.card-meta { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.6rem; flex-wrap: wrap; }
-
-.badge {
-  font-size: 0.68rem;
-  padding: 2px 8px;
-  border-radius: 20px;
-  font-weight: 500;
-}
-.badge-active { background: rgba(99,153,34,0.2); color: #9ad99e; border: 1px solid rgba(99,153,34,0.3); }
-.badge-soon { background: rgba(255,255,255,0.06); color: rgba(245,240,232,0.4); border: 1px solid rgba(255,255,255,0.08); }
-
-/* FOOTER */
-.footer { text-align: center; padding: 1rem; font-size: 0.75rem; color: rgba(245,240,232,0.3); }
+  :root {
+    --forest: #1a2e1a;
+    --moss: #2d4a2d;
+    --fern: #4a7c4a;
+    --sage: #8fb88f;
+    --cream: #f5f0e8;
+    --amber: #d4872a;
+    --gold: #f0b840;
+    --bark: #6b4226;
+    --danger: #f44336;
+    --success: #4caf50;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var(--cream); min-height: 100vh; overflow-x: hidden; }
+  button, input { font: inherit; }
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; flex-direction: column; }
+  #screen-start { position: relative; justify-content: center; align-items: center; text-align: center; overflow: hidden; padding: 2rem; }
+  .forest-bg { position: absolute; inset: 0; background: radial-gradient(ellipse at 20% 80%, rgba(74,124,74,0.3) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(45,74,45,0.4) 0%, transparent 50%), linear-gradient(160deg, #0d1a0d 0%, #1a2e1a 40%, #243824 100%); z-index: 0; }
+  .trees { position: absolute; bottom: 0; left: 0; right: 0; height: 220px; z-index: 1; display: flex; align-items: flex-end; justify-content: space-around; overflow: hidden; }
+  .tree { width: 0; height: 0; border-left: solid transparent; border-right: solid transparent; border-bottom: solid; position: relative; animation: sway 4s ease-in-out infinite; }
+  .tree::before, .tree::after { content: ''; position: absolute; width: 0; height: 0; border-left: solid transparent; border-right: solid transparent; border-bottom: solid; left: 50%; transform: translateX(-50%); }
+  .tree-1 { border-left-width: 22px; border-right-width: 22px; border-bottom-width: 60px; border-bottom-color: #1d3d1d; animation-delay: 0s; }
+  .tree-1::before { border-left-width: 18px; border-right-width: 18px; border-bottom-width: 50px; border-bottom-color: #234a23; bottom: 40px; }
+  .tree-1::after { border-left-width: 14px; border-right-width: 14px; border-bottom-width: 40px; border-bottom-color: #2a552a; bottom: 75px; }
+  .tree-2 { border-left-width: 30px; border-right-width: 30px; border-bottom-width: 80px; border-bottom-color: #162e16; animation-delay: 0.5s; }
+  .tree-2::before { border-left-width: 24px; border-right-width: 24px; border-bottom-width: 65px; border-bottom-color: #1d3d1d; bottom: 55px; }
+  .tree-2::after { border-left-width: 18px; border-right-width: 18px; border-bottom-width: 50px; border-bottom-color: #234a23; bottom: 100px; }
+  .tree-3 { border-left-width: 18px; border-right-width: 18px; border-bottom-width: 50px; border-bottom-color: #1a3a1a; animation-delay: 1s; }
+  .tree-3::before { border-left-width: 14px; border-right-width: 14px; border-bottom-width: 42px; border-bottom-color: #214521; bottom: 32px; }
+  .tree-3::after { border-left-width: 10px; border-right-width: 10px; border-bottom-width: 32px; border-bottom-color: #284f28; bottom: 62px; }
+  .tree-4 { border-left-width: 26px; border-right-width: 26px; border-bottom-width: 70px; border-bottom-color: #183218; animation-delay: 1.5s; }
+  .tree-4::before { border-left-width: 20px; border-right-width: 20px; border-bottom-width: 58px; border-bottom-color: #1e421e; bottom: 48px; }
+  .tree-4::after { border-left-width: 15px; border-right-width: 15px; border-bottom-width: 44px; border-bottom-color: #254f25; bottom: 90px; }
+  .tree-5 { border-left-width: 20px; border-right-width: 20px; border-bottom-width: 55px; border-bottom-color: #1c381c; animation-delay: 2s; }
+  .tree-5::before { border-left-width: 16px; border-right-width: 16px; border-bottom-width: 46px; border-bottom-color: #234823; bottom: 36px; }
+  .tree-5::after { border-left-width: 12px; border-right-width: 12px; border-bottom-width: 36px; border-bottom-color: #2a542a; bottom: 70px; }
+  @keyframes sway { 0%,100% { transform: rotate(-1deg);} 50% { transform: rotate(1deg);} }
+  .start-content { position: relative; z-index: 2; max-width: 380px; animation: fadeUp 0.8s ease both; }
+  @keyframes fadeUp { from {opacity:0; transform:translateY(30px);} to {opacity:1; transform:translateY(0);} }
+  .moose-icon { font-size: 5rem; display: block; margin-bottom: 1rem; filter: drop-shadow(0 0 20px rgba(212,135,42,0.5)); animation: float 3s ease-in-out infinite; }
+  @keyframes float { 0%,100% {transform:translateY(0);} 50% {transform:translateY(-10px);} }
+  .start-title { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 700; line-height: 1; color: var(--cream); text-shadow: 0 2px 20px rgba(0,0,0,0.5); margin-bottom: 0.3rem; }
+  .start-subtitle { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; color: var(--sage); margin-bottom: 0.5rem; letter-spacing: 0.1em; }
+  .route-badge, .utility-badge { display: inline-flex; align-items: center; gap: 0.4rem; background: rgba(240,184,64,0.15); border: 1px solid rgba(240,184,64,0.3); color: var(--gold); font-size: 0.75rem; font-weight: 500; padding: 0.3rem 0.8rem; border-radius: 20px; margin-bottom: 1.5rem; letter-spacing: 0.05em; }
+  .utility-row { display:flex; flex-wrap:wrap; gap:0.5rem; justify-content:center; margin-bottom:1.5rem; }
+  .utility-badge { margin-bottom: 0; color: var(--cream); border-color: rgba(143,184,143,0.35); background: rgba(143,184,143,0.12); }
+  .start-desc { font-size: 0.95rem; color: rgba(245,240,232,0.78); line-height: 1.6; margin-bottom: 2rem; }
+  .btn-primary, .btn-secondary, .btn-inline { display:block; width:100%; padding:1rem 2rem; border-radius:12px; cursor:pointer; transition:transform 0.2s, box-shadow 0.2s, background 0.2s, border-color 0.2s; text-align:center; text-decoration:none; }
+  .btn-primary { background: linear-gradient(135deg, var(--amber), var(--gold)); color: var(--forest); font-weight:700; font-size:1rem; border:none; letter-spacing:0.05em; box-shadow:0 4px 20px rgba(212,135,42,0.4); margin-bottom:0.8rem; }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow:0 8px 30px rgba(212,135,42,0.5); }
+  .btn-secondary, .btn-inline { background:transparent; color:var(--sage); font-weight:500; font-size:0.95rem; border:1px solid rgba(143,184,143,0.3); }
+  .btn-secondary:hover, .btn-inline:hover { background: rgba(143,184,143,0.1); color: var(--cream); }
+  .btn-inline { width:auto; padding:0.75rem 1rem; font-size:0.85rem; }
+  #screen-map { flex-direction: column; }
+  .map-header { background: var(--moss); padding: 1rem 1.2rem 0.8rem; border-bottom: 1px solid rgba(255,255,255,0.08); }
+  .map-header-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:0.8rem; gap:0.8rem; }
+  .map-title { font-family:'Playfair Display', serif; font-size:1.3rem; font-weight:700; }
+  .progress-info { display:flex; align-items:center; gap:0.4rem; font-size:0.85rem; color:var(--gold); font-weight:600; white-space:nowrap; }
+  .progress-bar-wrap { background: rgba(255,255,255,0.1); border-radius:6px; height:6px; overflow:hidden; margin-bottom:0.8rem; }
+  .progress-bar-fill { height:100%; background:linear-gradient(90deg, var(--amber), var(--gold)); border-radius:6px; transition:width 0.5s ease; }
+  .map-actions { display:flex; gap:0.6rem; flex-wrap:wrap; }
+  .map-area { flex:1; position:relative; overflow:hidden; background:linear-gradient(180deg, #1a2e1a 0%, #243824 100%); min-height:320px; }
+  #real-map { width:100%; height:100%; min-height:320px; }
+  .map-overlay-panel { position:absolute; left:12px; right:12px; bottom:12px; z-index:2; padding:0.8rem 0.9rem; border-radius:14px; background:rgba(15,25,15,0.78); border:1px solid rgba(255,255,255,0.08); backdrop-filter:blur(8px); display:flex; flex-direction:column; gap:0.35rem; box-shadow:0 8px 24px rgba(0,0,0,0.18); }
+  .map-overlay-title { color:var(--gold); font-size:0.8rem; font-weight:700; }
+  .map-overlay-text { font-size:0.8rem; line-height:1.45; color:rgba(245,240,232,0.76); }
+  .stops-list { background:var(--moss); border-top:1px solid rgba(255,255,255,0.08); flex:0 0 auto; max-height:45vh; overflow-y:auto; }
+  .region-label { padding:0.6rem 1.2rem 0.3rem; font-size:0.65rem; font-weight:600; letter-spacing:0.12em; text-transform:uppercase; color:var(--sage); border-bottom:1px solid rgba(255,255,255,0.06); }
+  .stop-item { display:flex; align-items:center; gap:1rem; padding:0.85rem 1.2rem; border-bottom:1px solid rgba(255,255,255,0.05); cursor:pointer; transition:background 0.2s, transform 0.2s; }
+  .stop-item:hover { background:rgba(255,255,255,0.04); }
+  .stop-item.locked { opacity:0.5; cursor:default; }
+  .stop-item.next-active { background:rgba(240,184,64,0.05); }
+  .stop-num { width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:0.8rem; font-weight:700; flex-shrink:0; border:2px solid; transition:all 0.3s; }
+  .stop-num.done { background:var(--amber); border-color:var(--gold); color:var(--forest); }
+  .stop-num.next { background:transparent; border-color:var(--gold); color:var(--gold); animation:pulse-border 2s infinite; }
+  .stop-num.pending { background:transparent; border-color:rgba(143,184,143,0.3); color:rgba(245,240,232,0.4); }
+  @keyframes pulse-border { 0%,100% { box-shadow:0 0 0 0 rgba(240,184,64,0.4);} 50% { box-shadow:0 0 0 6px rgba(240,184,64,0);} }
+  .stop-info { flex:1; }
+  .stop-name { font-weight:500; font-size:0.92rem; margin-bottom:0.12rem; }
+  .stop-hint { font-size:0.75rem; color:rgba(245,240,232,0.5); }
+  .stop-moose { font-size:1.2rem; }
+  #screen-stop { flex-direction:column; }
+  .stop-header { background:var(--moss); padding:1rem 1.2rem; display:flex; align-items:center; gap:1rem; border-bottom:1px solid rgba(255,255,255,0.08); }
+  .back-btn { background:none; border:none; color:var(--cream); font-size:1.3rem; cursor:pointer; padding:0.2rem; }
+  .stop-header-info { flex:1; }
+  .stop-header-num { font-size:0.7rem; color:var(--sage); letter-spacing:0.1em; text-transform:uppercase; }
+  .stop-header-name { font-family:'Playfair Display', serif; font-size:1.2rem; font-weight:700; }
+  .stop-body { flex:1; overflow-y:auto; padding:1.5rem 1.2rem; }
+  .stop-illustration { width:100%; height:160px; background:linear-gradient(135deg, var(--moss) 0%, #1a3a1a 100%); border-radius:16px; display:flex; align-items:center; justify-content:center; font-size:5rem; margin-bottom:1.2rem; position:relative; overflow:hidden; }
+  .stop-illustration::before { content:''; position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(212,135,42,0.12) 0%, transparent 70%); }
+  .stop-desc { font-size:0.92rem; line-height:1.72; color:rgba(245,240,232,0.88); margin-bottom:1.1rem; }
+  .info-grid { display:grid; grid-template-columns:1fr; gap:0.8rem; margin-bottom:1.2rem; }
+  .task-card, .info-card { background:rgba(240,184,64,0.08); border:1px solid rgba(240,184,64,0.2); border-radius:12px; padding:1rem 1.1rem; }
+  .info-card { background:rgba(143,184,143,0.08); border-color:rgba(143,184,143,0.2); }
+  .task-label { font-size:0.65rem; letter-spacing:0.12em; text-transform:uppercase; color:var(--gold); font-weight:700; margin-bottom:0.4rem; }
+  .info-card .task-label { color:var(--sage); }
+  .task-text { font-size:0.9rem; line-height:1.6; color:var(--cream); }
+  .stop-actions { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-bottom:1.2rem; }
+  .code-input-wrap { margin-bottom:1rem; }
+  .code-label { font-size:0.8rem; color:var(--sage); margin-bottom:0.5rem; display:block; }
+  .code-input { width:100%; padding:1rem; background:rgba(255,255,255,0.06); border:1px solid rgba(143,184,143,0.3); border-radius:10px; color:var(--cream); font-size:1.1rem; letter-spacing:0.2em; text-align:center; text-transform:uppercase; outline:none; transition:border-color 0.2s; }
+  .code-input:focus { border-color:var(--gold); }
+  .code-input.success { border-color:var(--success); background:rgba(76,175,80,0.1); }
+  .code-input.error { border-color:var(--danger); background:rgba(244,67,54,0.1); animation:shake 0.3s; }
+  @keyframes shake { 0%,100% { transform:translateX(0);} 25% {transform:translateX(-8px);} 75% {transform:translateX(8px);} }
+  .error-msg { color:var(--danger); font-size:0.8rem; margin-top:0.4rem; display:none; }
+  .error-msg.show { display:block; }
+  .success-msg { color:#9ad99e; font-size:0.8rem; margin-top:0.4rem; display:none; }
+  .success-msg.show { display:block; }
+  #screen-prize { justify-content:center; align-items:center; text-align:center; padding:2rem; position:relative; overflow:hidden; }
+  .prize-bg { position:absolute; inset:0; background:radial-gradient(ellipse at center, rgba(212,135,42,0.15) 0%, transparent 70%), linear-gradient(160deg, #0d1a0d, #1a2e1a); }
+  .confetti { position:absolute; inset:0; pointer-events:none; overflow:hidden; }
+  .confetti-piece { position:absolute; width:10px; height:10px; border-radius:2px; animation:confetti-fall linear infinite; }
+  @keyframes confetti-fall { 0% { transform:translateY(-20px) rotate(0deg); opacity:1;} 100% { transform:translateY(100vh) rotate(720deg); opacity:0;} }
+  .prize-content { position:relative; z-index:2; max-width:340px; }
+  .prize-moose { font-size:4rem; display:block; margin-bottom:1rem; animation:float 3s ease-in-out infinite; }
+  .prize-title { font-family:'Playfair Display', serif; font-size:2.2rem; font-weight:700; margin-bottom:0.5rem; background:linear-gradient(135deg, var(--amber), var(--gold)); -webkit-background-clip:text; -webkit-text-fill-color:transparent; background-clip:text; }
+  .prize-subtitle { color:rgba(245,240,232,0.7); font-size:0.9rem; margin-bottom:2rem; line-height:1.6; }
+  .prize-card { background:rgba(240,184,64,0.1); border:1px solid rgba(240,184,64,0.3); border-radius:16px; padding:1.5rem; margin-bottom:1.5rem; }
+  .prize-qr { width:120px; height:120px; background:var(--cream); border-radius:12px; margin:0 auto 1rem; display:grid; grid-template-columns:repeat(10, 1fr); gap:1px; padding:10px; overflow:hidden; }
+  .qr-cell { border-radius:1px; }
+  .prize-code { font-size:1.25rem; letter-spacing:0.18em; font-weight:700; color:var(--gold); margin-bottom:0.3rem; word-break:break-word; }
+  .prize-code-label { font-size:0.75rem; color:rgba(245,240,232,0.5); }
+  .prize-options { display:grid; grid-template-columns:1fr 1fr; gap:0.8rem; margin-bottom:1.5rem; }
+  .prize-option { background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.1); border-radius:12px; padding:1rem 0.8rem; text-align:center; cursor:pointer; transition:all 0.2s; }
+  .prize-option:hover { border-color:var(--gold); background:rgba(240,184,64,0.08); }
+  .prize-option.selected { border-color:var(--gold); background:rgba(240,184,64,0.12); }
+  .prize-option-icon { font-size:1.8rem; display:block; margin-bottom:0.4rem; }
+  .prize-option-name { font-size:0.8rem; font-weight:500; color:var(--cream); }
+  .prize-option-where { font-size:0.7rem; color:var(--sage); margin-top:0.2rem; }
+  .collected-badge { background:linear-gradient(135deg, rgba(76,175,80,0.2), rgba(76,175,80,0.05)); border:1px solid rgba(76,175,80,0.4); border-radius:12px; padding:1.2rem; text-align:center; }
+  .collected-text { color:#81c784; font-size:0.9rem; font-weight:500; }
+  .status-toast { position:fixed; left:50%; bottom:18px; transform:translateX(-50%) translateY(140%); z-index:100; width:calc(100% - 24px); max-width:420px; background:rgba(15,25,15,0.92); color:var(--cream); border:1px solid rgba(255,255,255,0.08); border-radius:14px; padding:0.9rem 1rem; box-shadow:0 12px 34px rgba(0,0,0,0.35); transition:transform 0.28s ease; font-size:0.9rem; }
+  .status-toast.show { transform:translateX(-50%) translateY(0); }
+  .qr-sheet { position:fixed; inset:0; z-index:120; display:none; align-items:flex-end; justify-content:center; background:rgba(0,0,0,0.6); }
+  .qr-sheet.open { display:flex; }
+  .qr-sheet-card { width:100%; max-width:520px; background:var(--moss); border-radius:18px 18px 0 0; border:1px solid rgba(255,255,255,0.08); padding:1rem; box-shadow:0 -10px 30px rgba(0,0,0,0.25); }
+  .qr-sheet-header { display:flex; align-items:center; justify-content:space-between; gap:0.8rem; margin-bottom:0.8rem; }
+  .qr-title { font-weight:700; font-size:1rem; }
+  .qr-subtitle { font-size:0.8rem; color:rgba(245,240,232,0.65); margin-top:0.2rem; }
+  .icon-btn { border:1px solid rgba(255,255,255,0.15); background:transparent; color:var(--cream); width:40px; height:40px; border-radius:12px; cursor:pointer; }
+  #qr-reader { width:100%; min-height:260px; overflow:hidden; border-radius:14px; background:#111; }
+  .qr-help { font-size:0.8rem; line-height:1.5; color:rgba(245,240,232,0.72); margin-top:0.8rem; }
+  .hidden { display:none !important; }
+  @media (max-width: 480px) {
+    .start-title { font-size:2.6rem; }
+    .stop-actions { grid-template-columns:1fr; }
+    .map-header-top { align-items:flex-start; flex-direction:column; }
+    .map-actions { width:100%; }
+    .map-actions .btn-inline { flex:1 1 100%; width:100%; }
+    .prize-options { grid-template-columns:1fr; }
+  }
 </style>
 </head>
 <body>
-
-<div class="header">
-  <div class="header-inner">
-    <img class="herbas" src="assets/icons/herbas.png" alt="Širvintų herbas">
-    <h1 class="site-title">Širvintos keliauja</h1>
-    <p class="site-sub">Pažink rajono miestelius žaisdamas · QR maršrutai</p>
+<div id="screen-start" class="screen active">
+  <div class="forest-bg"></div>
+  <div class="trees"><div class="tree tree-3"></div><div class="tree tree-1"></div><div class="tree tree-4"></div><div class="tree tree-2"></div><div class="tree tree-5"></div><div class="tree tree-1"></div><div class="tree tree-3"></div></div>
+  <div class="start-content">
+    <span class="moose-icon">🦌</span>
+    <h1 class="start-title">Briedžių<br>Takas</h1>
+    <p class="start-subtitle">Kernavė · Širvintos</p>
+    <div class="route-badge">🗺 10 stotelių · QR maršrutas · telefonui</div>
+    <div class="utility-row"><div class="utility-badge">📍 Interaktyvus žemėlapis</div><div class="utility-badge">📷 QR skenavimas</div><div class="utility-badge">💾 Progreso išsaugojimas</div></div>
+    <p class="start-desc">Surask visus 10 pasislėpusių briedžių, pažink vietoves žaisdamas ir pabaigoje atsiimk prizą. Demo versija jau palaiko tęsimą po refresh, navigaciją ir PWA režimą.</p>
+    <button class="btn-primary" onclick="showMap()">Pradėti žaidimą →</button>
+    <button class="btn-secondary" onclick="continueGame()">Tęsti žaidimą</button>
   </div>
 </div>
-
-<div class="grid-wrap">
-  <div class="grid">
-
-    <a class="card" href="sirvintos/">
-      <span class="card-icon">🏙</span>
-      <div class="card-name">Širvintos</div>
-      <div class="card-desc">Rajono centras · marių pakrantė</div>
-      <div class="card-meta">
-        <span class="badge badge-active">5 stotelės</span>
-        <span class="badge badge-active">aktyvus</span>
-      </div>
-    </a>
-
-    <a class="card" href="kernave/">
-      <span class="card-icon">🏰</span>
-      <div class="card-name">Kernavė</div>
-      <div class="card-desc">UNESCO paveldas · piliakalniai</div>
-      <div class="card-meta">
-        <span class="badge badge-active">5 stotelės</span>
-        <span class="badge badge-active">aktyvus</span>
-      </div>
-    </a>
-
-    <div class="card soon">
-      <span class="card-icon">⛪</span>
-      <div class="card-name">Gelvonai</div>
-      <div class="card-desc">Senas miestelis · bažnyčia</div>
-      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
+<div id="screen-map" class="screen">
+  <div class="map-header">
+    <div class="map-header-top"><span class="map-title">🦌 Briedžių Takas</span><span class="progress-info" id="progress-text">0 / 10</span></div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+    <div class="map-actions">
+      <button class="btn-inline" onclick="focusNextStop()">🎯 Kita stotelė</button>
+      <button class="btn-inline" onclick="centerOnUser()">📍 Mano vieta</button>
+      <button class="btn-inline" id="install-btn" onclick="installApp()" style="display:none;">⬇️ Įdiegti</button>
+      <button class="btn-inline" onclick="resetProgressConfirm()">♻️ Pradėti iš naujo</button>
     </div>
-
-    <div class="card soon">
-      <span class="card-icon">🌿</span>
-      <div class="card-name">Musninkai</div>
-      <div class="card-desc">Upių santaka · gamta</div>
-      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
-    </div>
-
-    <div class="card soon">
-      <span class="card-icon">🏞</span>
-      <div class="card-name">Čiobiškis</div>
-      <div class="card-desc">Neries pakrantė · dvaras</div>
-      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
-    </div>
-
-    <div class="card soon">
-      <span class="card-icon">🌾</span>
-      <div class="card-name">Zibalai</div>
-      <div class="card-desc">Kaimo tradicijos · laukai</div>
-      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
-    </div>
-
-    <div class="card soon">
-      <span class="card-icon">🌲</span>
-      <div class="card-name">Jauniūnai</div>
-      <div class="card-desc">Miškai · pažintiniai takai</div>
-      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
-    </div>
-
-    <div class="card soon">
-      <span class="card-icon">🦢</span>
-      <div class="card-name">Alionys</div>
-      <div class="card-desc">Širvintos upė · gamta</div>
-      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
-    </div>
-
+  </div>
+  <div class="map-area">
+    <div id="real-map"></div>
+    <div class="map-overlay-panel"><div class="map-overlay-title" id="map-overlay-title">Interaktyvus žemėlapis aktyvus</div><div class="map-overlay-text" id="map-overlay-text">Paspausk stotelę žemėlapyje arba sąraše. Jei Google Maps raktas dar neįvestas, čia matysi demo režimą.</div></div>
+  </div>
+  <div class="stops-list">
+    <div class="region-label">📍 Kernavė (1–5)</div>
+    <div id="stop-item-0" class="stop-item" onclick="showStop(0)"><div class="stop-num next" id="stop-num-0">1</div><div class="stop-info"><div class="stop-name">Kernavės muziejus</div><div class="stop-hint">UNESCO paveldas · prie įėjimo</div></div><div class="stop-moose" id="stop-moose-0">🦌</div></div>
+    <div id="stop-item-1" class="stop-item locked" onclick="showStop(1)"><div class="stop-num pending" id="stop-num-1">2</div><div class="stop-info"><div class="stop-name">Kernavės bažnyčia</div><div class="stop-hint">Šventoriuje · prie mozaikų</div></div><div class="stop-moose" id="stop-moose-1">🔒</div></div>
+    <div id="stop-item-2" class="stop-item locked" onclick="showStop(2)"><div class="stop-num pending" id="stop-num-2">3</div><div class="stop-info"><div class="stop-name">Aukuro kalnas</div><div class="stop-hint">Prie laiptų apačios</div></div><div class="stop-moose" id="stop-moose-2">🔒</div></div>
+    <div id="stop-item-3" class="stop-item locked" onclick="showStop(3)"><div class="stop-num pending" id="stop-num-3">4</div><div class="stop-info"><div class="stop-name">Baltojo Kalno apžvalgos aikštelė</div><div class="stop-hint">Ant medinio turėklo</div></div><div class="stop-moose" id="stop-moose-3">🔒</div></div>
+    <div id="stop-item-4" class="stop-item locked" onclick="showStop(4)"><div class="stop-num pending" id="stop-num-4">5</div><div class="stop-info"><div class="stop-name">Kernavės senovės gyvenvietė</div><div class="stop-hint">Rekonstruota gyvenvietė · trobelė</div></div><div class="stop-moose" id="stop-moose-4">🔒</div></div>
+    <div class="region-label">📍 Širvintos (6–10)</div>
+    <div id="stop-item-5" class="stop-item locked" onclick="showStop(5)"><div class="stop-num pending" id="stop-num-5">6</div><div class="stop-info"><div class="stop-name">Širvintų Centras</div><div class="stop-hint">Prie fontano · aikštė</div></div><div class="stop-moose" id="stop-moose-5">🔒</div></div>
+    <div id="stop-item-6" class="stop-item locked" onclick="showStop(6)"><div class="stop-num pending" id="stop-num-6">7</div><div class="stop-info"><div class="stop-name">Sporto Kompleksas</div><div class="stop-hint">Baseinas · pagrindinis įėjimas</div></div><div class="stop-moose" id="stop-moose-6">🔒</div></div>
+    <div id="stop-item-7" class="stop-item locked" onclick="showStop(7)"><div class="stop-num pending" id="stop-num-7">8</div><div class="stop-info"><div class="stop-name">Miesto Parkas</div><div class="stop-hint">Tvenkinio krantas</div></div><div class="stop-moose" id="stop-moose-7">🔒</div></div>
+    <div id="stop-item-8" class="stop-item locked" onclick="showStop(8)"><div class="stop-num pending" id="stop-num-8">9</div><div class="stop-info"><div class="stop-name">Širvintų Ežeras</div><div class="stop-hint">Apžvalgos aikštelė</div></div><div class="stop-moose" id="stop-moose-8">🔒</div></div>
+    <div id="stop-item-9" class="stop-item locked" onclick="showStop(9)"><div class="stop-num pending" id="stop-num-9">10</div><div class="stop-info"><div class="stop-name">Turgaus Aikštė</div><div class="stop-hint">PASKUTINĖ STOTELĖ 🏆</div></div><div class="stop-moose" id="stop-moose-9">🔒</div></div>
   </div>
 </div>
-
-<div class="footer">© 2026 Širvintos keliauja</div>
-
+<div id="screen-stop" class="screen">
+  <div class="stop-header"><button class="back-btn" onclick="showMap()">←</button><div class="stop-header-info"><div class="stop-header-num" id="stop-header-num">Stotelė 1 iš 10 · Kernavė</div><div class="stop-header-name" id="stop-header-name">Kernavės Piliakalnis</div></div><span style="font-size:1.5rem" id="stop-header-icon">🏰</span></div>
+  <div class="stop-body">
+    <div class="stop-illustration" id="stop-illustration">🦌</div>
+    <p class="stop-desc" id="stop-desc">Kernavės piliakalnis – vienas seniausių Lietuvos istorinių paminklų.</p>
+    <div class="info-grid">
+      <div class="task-card"><div class="task-label">🎯 Užduotis</div><div class="task-text" id="stop-task">Rask briedžio skulptūrėlę prie laiptų į piliakalnį ir nuskaityk QR kodą.</div></div>
+      <div class="info-card"><div class="task-label">📚 Įdomus faktas</div><div class="task-text" id="stop-fact">Kernavė vadinama viena pirmųjų Lietuvos sostinių.</div></div>
+    </div>
+    <div class="stop-actions"><button class="btn-secondary" id="nav-btn">📍 Vykstu ten</button><button class="btn-secondary" onclick="openQrSheet()">📷 Skenuoti QR</button></div>
+    <div id="already-collected" class="collected-badge hidden" style="margin-bottom:1rem"><div class="collected-text">✅ Briedis surinktas! Tęsk kelionę 🦌</div></div>
+    <div id="code-section"><div class="code-input-wrap"><label class="code-label">Įveskite stotelės kodą:</label><input class="code-input" id="code-input" type="text" maxlength="8" placeholder="KODAS" oninput="this.value=this.value.toUpperCase()"><div class="error-msg" id="error-msg">Neteisingas kodas. Bandyk dar kartą! 🦌</div><div class="success-msg" id="success-msg">Teisingai! Išsaugojau progresą.</div></div><button class="btn-primary" onclick="checkCode()">Patvirtinti kodą</button></div>
+  </div>
+</div>
+<div id="screen-prize" class="screen"><div class="prize-bg"></div><div class="confetti" id="confetti"></div><div class="prize-content"><span class="prize-moose">🦌</span><h2 class="prize-title">Sveikiname!</h2><p class="prize-subtitle">Suradai visus 10 briedžių ir įveikei Briedžių Taką!<br>Pasirink savo prizą:</p><div class="prize-options"><div class="prize-option" onclick="selectPrize(0, this)"><span class="prize-option-icon">🏊</span><div class="prize-option-name">Nemokamas baseinas</div><div class="prize-option-where">Širvintų sporto kompleksas</div></div><div class="prize-option" onclick="selectPrize(1, this)"><span class="prize-option-icon">🎁</span><div class="prize-option-name">Briedžio suvenyras</div><div class="prize-option-where">Atsiimti Širvintose</div></div></div><div class="prize-card"><div class="prize-qr" id="prize-qr"></div><div class="prize-code" id="prize-code">BT-DEMO-XXXX</div><div class="prize-code-label">Parodyk šį kodą atsiimant prizą</div></div><button class="btn-secondary" onclick="showMap()">← Grįžti į žemėlapį</button></div></div>
+<div class="qr-sheet" id="qr-sheet"><div class="qr-sheet-card"><div class="qr-sheet-header"><div><div class="qr-title">QR skenavimas</div><div class="qr-subtitle">Leisk kamerą ir nukreipk ją į stotelės QR kodą.</div></div><button class="icon-btn" onclick="closeQrSheet()">✕</button></div><div id="qr-reader"></div><div class="qr-help">Jei kamera neatsidaro, patikrink naršyklės leidimus arba įvesk kodą ranka.</div></div></div>
+<div class="status-toast" id="status-toast"></div>
+<script src="config.js"></script>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(e => console.warn('SW failed', e));
-  });
-}
+const stops = [
+  { name: "Kernavės muziejus", region: "Kernavė", num: 1, icon: "🏛", code: "K001", lat: 54.8856563, lng: 24.853976, desc: "Vienintelis specializuotas archeologijos muziejus Lietuvoje, įkurtas 1930 m. Trijose salėse eksponuojama per 20 tūkst. radinių – nuo akmens amžiaus iki XIII–XIV a. viduramžių Kernavės.", fact: "2004 m. Kernavės archeologinė vietovė įtraukta į UNESCO Pasaulio paveldo sąrašą. Ištirta tik 1,5 proc. teritorijos!", task: "Prie muziejaus pagrindinio įėjimo rask informacinį stendą su briedžio ženklu ir nuskaityk QR kodą." },
+  { name: "Kernavės bažnyčia", region: "Kernavė", num: 2, icon: "⛪", code: "K002", lat: 54.8847944, lng: 24.8519604, desc: "Neogotikinio stiliaus vienbokštė bažnyčia, pastatyta 1910–1920 m. amerikiečių lietuvių lėšomis. Šventoriuje puošnios mozaikos, o šalia stovi medinė koplyčia – liaudies architektūros pavyzdys.", fact: "Šalia bažnyčios stovi medinė koplyčia, kuri, manoma, kilusi iš XIII amžiaus Kernavelės dvaro.", task: "Bažnyčios šventoriuje, prie mozaikų kelio, rask mediniame stulpelyje įtvirtintą briedžio ženklą su kodu." },
+  { name: "Aukuro kalnas", region: "Kernavė", num: 3, icon: "🏔", code: "K003", lat: 54.882040, lng: 24.851481, desc: "Centrinis Kernavės piliakalnis, saugojęs kunigaikščio dvarą. Anot padavimų, čia degė vaidilučių prižiūrima amžinoji ugnis. Nuo viršūnės atsiveria nuostabi Neries slėnio panorama.", fact: "1390 m. Kernavės pilį sudegino patys jos gynėjai, nelaukdami artėjančios Kryžiuočių ordino kariuomenės.", task: "Prie Aukuro kalno laiptų apačioje rask medinę lentą su briedžiu ir nuskaityk ant jos esantį QR kodą." },
+  { name: "Baltojo Kalno apžvalgos aikštelė", region: "Kernavė", num: 4, icon: "🌅", code: "K004", lat: 54.886889, lng: 24.829861, desc: "Nutolusi nuo miesto triukšmo, ši aikštelė siūlo vieną gražiausių Neries upės vaizdų visoje apylinkėje. Pažintinis takas veda per mišką – puiki vieta pailsėti ir pasijusti gamtoje.", fact: "Baltas kalnas savo spalvą gavo nuo kreidos ir kalcito nuosėdų, iš tolo matomas upės slėnyje.", task: "Apžvalgos aikštelėje, ant medinio turėklo, priklijuotas briedžio lipdukas su kodu." },
+  { name: "Kernavės senovės gyvenvietė", region: "Kernavė", num: 5, icon: "🏘", code: "K005", lat: 54.884167, lng: 24.847556, desc: "Rekonstruotas XIII–XIV a. viduramžių miesto fragmentas – gatvė ir amatininkų kiemai. Čia gyveno juvelyrai, kalviai, puodžiai – klestintis amatininkų miestas paskutinėje Europos pagoniškoje sostinėje.", fact: "Kernavė vadinama 'Lietuvos Troja' – miesto liekanos išsaugotos po durpių sluoksniu, todėl išlikę net mediniai dirbiniai.", task: "Rekonstruotos gyvenvietės pirmosios trobelės sienos kampe rasi medinį briedžiuką su QR kodu." },
+  { name: "Širvintų Centras", region: "Širvintos", num: 6, icon: "🏙", code: "S001", lat: 55.0433, lng: 24.9542, desc: "Širvintų miesto aikštė – visuomeninio gyvenimo centras. Fontanas ir žalieji plotai kviečia trumpam sustoti.", fact: "Miesto centrinės aikštės puikiai tinka pirmoms arba pereinamosioms stotelėms, nes jas lengva rasti lankytojams.", task: "Prie miesto fontano postamento, iš pietų pusės, priklijuotas QR kodas su briedžiu." },
+  { name: "Sporto Kompleksas", region: "Širvintos", num: 7, icon: "🏊", code: "S002", lat: 55.0449, lng: 24.9594, desc: "Širvintų sporto ir pramogų kompleksas – modernus centras su baseinu, sporto salėmis ir aktyvaus laisvalaikio zonomis.", fact: "Tokia stotelė puikiai sujungia maršrutą su prizu, nes žaidimo pabaiga jau iš anksto siejasi su vieta.", task: "Prie pagrindinio įėjimo į baseiną, ant informacinio stendo, kabo briedžio kortelė." },
+  { name: "Miesto Parkas", region: "Širvintos", num: 8, icon: "🌿", code: "S003", lat: 55.0465, lng: 24.9568, desc: "Širvintų miesto parkas su tvenkiniu – mėgstama vieta pasivaikščiojimams ir trumpam poilsiui.", fact: "Parkai gerai veikia kaip foto ir social-sharing stotelės, nes lankytojai čia dažniau sustoja ilgiau.", task: "Prie tvenkinio, ant suoliuko prie gluosnio, rasi briedžio lipduką su kodu." },
+  { name: "Širvintų Ežeras", region: "Širvintos", num: 9, icon: "🏞", code: "S004", lat: 55.0481, lng: 24.9626, desc: "Rami vieta trumpam atsikvėpti gamtos apsuptyje. Apžvalgos aikštelė suteikia aiškų maršruto finalo jausmą.", fact: "Tokios stotelės ypač tinka priešpaskutiniam etapui, nes kuria emocinį pakilimą prieš finišą.", task: "Apžvalgos aikštelėje prie ežero, ant teleskopo stovo, priklijuotas briedžio ženklas." },
+  { name: "Turgaus Aikštė", region: "Širvintos", num: 10, icon: "🏆", code: "S005", lat: 55.0441, lng: 24.9508, desc: "Paskutinė stotelė! Turgaus aikštė – istorinė miesto vieta, kuri puikiai tinka finišui ir prizo atsiėmimo logikai.", fact: "Finalinė stotelė turėtų būti aiški, lengvai randama ir logiškai susieta su prizu arba organizatoriaus tašku.", task: "PASKUTINIS BRIEDIS! Rask jį prie turgavietės vartų – jis laiko aukso taurę. Kodas suteiks tau prizą!" }
+];
+const STORAGE_KEY = 'briedziu_takas_v2';
+const PRIZE_STORAGE_KEY = 'briedziu_takas_prize_v1';
+let collected = new Array(stops.length).fill(false);
+let currentStop = 0;
+let map = null, markers = [], infoWindow = null, userMarker = null, userPosition = null, deferredInstallPrompt = null, qrScanner = null, mapReady = false, usingGoogleMap = false;
+function showScreen(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById('screen-'+id).classList.add('active');window.scrollTo(0,0);if(id==='map'){setTimeout(()=>{if(map&&usingGoogleMap&&window.google&&google.maps){google.maps.event.trigger(map,'resize');}},100);}}
+function saveProgress(){localStorage.setItem(STORAGE_KEY, JSON.stringify({collected, updatedAt: Date.now()}));}
+function loadProgress(){const raw=localStorage.getItem(STORAGE_KEY);if(!raw)return;try{const parsed=JSON.parse(raw);if(Array.isArray(parsed.collected)&&parsed.collected.length===stops.length)collected=parsed.collected;}catch(e){console.warn('Progress load failed',e);}}
+function resetProgressConfirm(){if(!confirm('Ar tikrai nori išvalyti visą progresą?'))return;collected=new Array(stops.length).fill(false);localStorage.removeItem(STORAGE_KEY);localStorage.removeItem(PRIZE_STORAGE_KEY);updateMapUI();renderMarkers();showToast('Progresas išvalytas. Gali pradėti iš naujo.');showMap();}
+function continueGame(){loadProgress();const nextIdx=getNextStopIndex();if(nextIdx>=0&&nextIdx<stops.length){showMap();focusOnStop(nextIdx);}else if(collected.every(Boolean)){showPrize();}else{showMap();}}
+function getNextStopIndex(){const next=collected.findIndex(v=>!v);return next===-1?stops.length-1:next;}
+function showMap(){updateMapUI();showScreen('map');if(!mapReady) initMap();}
+function showStop(idx){const stop=stops[idx];currentStop=idx;if(idx>0&&!collected[idx-1]){showToast('🔒 Pirmiausia surink ankstesnę stotelę.');return;}document.getElementById('stop-header-num').textContent=`Stotelė ${stop.num} iš ${stops.length} · ${stop.region}`;document.getElementById('stop-header-name').textContent=stop.name;document.getElementById('stop-header-icon').textContent=stop.icon;document.getElementById('stop-illustration').textContent=stop.icon;document.getElementById('stop-desc').textContent=stop.desc;document.getElementById('stop-task').textContent=stop.task;document.getElementById('stop-fact').textContent=stop.fact;const alreadyDone=collected[idx];document.getElementById('already-collected').classList.toggle('hidden',!alreadyDone);document.getElementById('code-section').style.display=alreadyDone?'none':'block';const input=document.getElementById('code-input');input.value='';input.className='code-input';document.getElementById('error-msg').className='error-msg';document.getElementById('success-msg').className='success-msg';document.getElementById('nav-btn').onclick=()=>navigateToStop(stop);showScreen('stop');}
+function navigateToStop(stop){window.open(`https://www.google.com/maps/dir/?api=1&destination=${stop.lat},${stop.lng}`,'_blank');}
+function checkCode(){const input=document.getElementById('code-input');const val=input.value.trim().toUpperCase();const stop=stops[currentStop];if(val===stop.code){input.className='code-input success';document.getElementById('success-msg').className='success-msg show';collected[currentStop]=true;saveProgress();updateMapUI();renderMarkers();setTimeout(()=>{if(collected.filter(Boolean).length===stops.length){showPrize();}else{showMap();focusNextStop();}},900);}else{input.className='code-input error';document.getElementById('error-msg').className='error-msg show';setTimeout(()=>{input.className='code-input';document.getElementById('error-msg').className='error-msg';},1500);}}
+function updateMapUI(){const c=collected.filter(Boolean).length;document.getElementById('progress-text').textContent=`${c} / ${stops.length}`;document.getElementById('progress-bar').style.width=`${(c/stops.length)*100}%`;collected.forEach((done,idx)=>{const numEl=document.getElementById(`stop-num-${idx}`);const itemEl=document.getElementById(`stop-item-${idx}`);const mooseEl=document.getElementById(`stop-moose-${idx}`);const isNext=!done&&(idx===0||collected[idx-1]);if(done){numEl.className='stop-num done';numEl.textContent='✓';itemEl.className='stop-item collected';mooseEl.textContent='🦌';}else if(isNext){numEl.className='stop-num next';numEl.textContent=idx+1;itemEl.className='stop-item next-active';mooseEl.textContent='🦌';}else{numEl.className='stop-num pending';numEl.textContent=idx+1;itemEl.className='stop-item locked';mooseEl.textContent='🔒';}});const nextIdx=getNextStopIndex();if(collected.every(Boolean)){document.getElementById('map-overlay-title').textContent='Maršrutas įveiktas';document.getElementById('map-overlay-text').textContent='Visi briedžiai surinkti. Gali atverti prizo ekraną arba grįžti į stoteles.';}else{document.getElementById('map-overlay-title').textContent=`Sekanti stotelė: ${stops[nextIdx].num}. ${stops[nextIdx].name}`;document.getElementById('map-overlay-text').textContent=`Regionas: ${stops[nextIdx].region}. Gali spausti „Kita stotelė“, atidaryti navigaciją arba rinktis žemėlapyje.`;}}
+function initMap(){mapReady=true;const apiKey=((window.BRIEDZIU_CONFIG&&window.BRIEDZIU_CONFIG.GOOGLE_MAPS_API_KEY)||'').trim();if(apiKey&&apiKey!=='PASTE_YOUR_GOOGLE_MAPS_API_KEY_HERE'){loadGoogleMaps(apiKey).then(()=>{usingGoogleMap=true;createGoogleMap();renderMarkers();centerInitialMap();centerOnUser(false);}).catch((error)=>{console.error('Google Maps load failed',error);usingGoogleMap=false;createFallbackMap('Nepavyko užkrauti Google Maps. Rodo demo žemėlapį.');});}else{usingGoogleMap=false;createFallbackMap('config.js faile dar neįvestas Google Maps API raktas. Rodomas demo režimas.');}}
+function loadGoogleMaps(apiKey){if(window.google&&window.google.maps) return Promise.resolve();return new Promise((resolve,reject)=>{const existing=document.getElementById('google-maps-script');if(existing){existing.addEventListener('load',resolve,{once:true});existing.addEventListener('error',reject,{once:true});return;}const script=document.createElement('script');script.id='google-maps-script';script.src=`https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(apiKey)}&v=weekly`;script.async=true;script.defer=true;script.onload=()=>resolve();script.onerror=reject;document.head.appendChild(script);});}
+function createGoogleMap(){map=new google.maps.Map(document.getElementById('real-map'),{center:{lat:54.965,lng:24.905},zoom:10,mapTypeControl:false,streetViewControl:false,fullscreenControl:false,clickableIcons:false});infoWindow=new google.maps.InfoWindow();document.getElementById('map-overlay-text').textContent='Google Maps aktyvus. Gali spausti žymeklius, rodyti savo lokaciją ir atidaryti kryptis.';}
+function createFallbackMap(message){const container=document.getElementById('real-map');container.innerHTML='';container.style.display='flex';container.style.alignItems='center';container.style.justifyContent='center';container.style.padding='18px';container.style.background='linear-gradient(180deg, #1a2e1a 0%, #243824 100%)';const card=document.createElement('div');card.style.width='100%';card.style.maxWidth='520px';card.style.borderRadius='18px';card.style.padding='1.1rem';card.style.background='rgba(15, 25, 15, 0.78)';card.style.border='1px solid rgba(255,255,255,0.08)';card.innerHTML=`<div style="font-size:2rem;margin-bottom:0.6rem;">🗺️</div><div style="font-weight:700;color:#f0b840;margin-bottom:0.4rem;">Demo žemėlapio režimas</div><div style="font-size:0.92rem;line-height:1.6;color:rgba(245,240,232,0.82);">${message}</div><div style="margin-top:0.9rem;font-size:0.82rem;line-height:1.5;color:rgba(245,240,232,0.65);">Kai įrašysi API raktą į <strong>config.js</strong>, čia atsiras tikras Google žemėlapis su markeriais ir tavo lokacija.</div>`;container.appendChild(card);}
+function renderMarkers(){if(!(usingGoogleMap&&map&&window.google&&google.maps)) return;markers.forEach(marker=>marker.setMap(null));markers=[];stops.forEach((stop,idx)=>{const isDone=collected[idx];const isNext=!isDone&&(idx===0||collected[idx-1]);const marker=new google.maps.Marker({position:{lat:stop.lat,lng:stop.lng},map,title:stop.name,label:isDone?'✓':String(stop.num),animation:isNext?google.maps.Animation.DROP:null});marker.addListener('click',()=>{if(infoWindow){infoWindow.setContent(`<div style="min-width:180px;color:#111"><div style="font-weight:700;margin-bottom:4px;">${stop.num}. ${stop.name}</div><div style="font-size:12px;color:#444;margin-bottom:8px;">${stop.region}</div><button onclick="window.__openStopFromMap(${idx})" style="padding:8px 10px;border:none;border-radius:10px;background:#d4872a;color:#fff;cursor:pointer;">Atverti stotelę</button></div>`);infoWindow.open({map,anchor:marker});}else showStop(idx);});markers.push(marker);});}
+window.__openStopFromMap=function(idx){showStop(idx);};
+function centerInitialMap(){if(!(usingGoogleMap&&map&&window.google&&google.maps)) return;const bounds=new google.maps.LatLngBounds();stops.forEach(stop=>bounds.extend({lat:stop.lat,lng:stop.lng}));map.fitBounds(bounds,40);}
+function focusOnStop(idx){if(idx<0||idx>=stops.length) return;const stop=stops[idx];if(usingGoogleMap&&map&&window.google&&google.maps){map.panTo({lat:stop.lat,lng:stop.lng});map.setZoom(14);}}
+function focusNextStop(){const nextIdx=getNextStopIndex();focusOnStop(nextIdx);showToast(`Kita stotelė: ${stops[nextIdx].num}. ${stops[nextIdx].name}`);}
+function centerOnUser(showStatus=true){if(!navigator.geolocation){if(showStatus) showToast('Ši naršyklė nepalaiko lokacijos.');return;}navigator.geolocation.getCurrentPosition((position)=>{userPosition={lat:position.coords.latitude,lng:position.coords.longitude};if(usingGoogleMap&&map&&window.google&&google.maps){if(userMarker) userMarker.setMap(null);userMarker=new google.maps.Marker({position:userPosition,map,title:'Jūsų vieta',icon:{path:google.maps.SymbolPath.CIRCLE,scale:8,fillColor:'#2d7cf6',fillOpacity:1,strokeColor:'#ffffff',strokeWeight:2}});map.panTo(userPosition);map.setZoom(13);}if(showStatus) showToast('Lokacija atnaujinta.');},(error)=>{console.warn('Geolocation failed',error);if(showStatus) showToast('Nepavyko gauti lokacijos. Patikrink naršyklės leidimus.');},{enableHighAccuracy:true,timeout:10000,maximumAge:30000});}
+function openQrSheet(){document.getElementById('qr-sheet').classList.add('open');if(typeof Html5Qrcode==='undefined'){showToast('QR biblioteka neužsikrovė.');return;}startQrScanner();}
+function closeQrSheet(){document.getElementById('qr-sheet').classList.remove('open');stopQrScanner();}
+async function startQrScanner(){try{if(qrScanner){try{await qrScanner.stop();}catch(e){}try{await qrScanner.clear();}catch(e){}}qrScanner=new Html5Qrcode('qr-reader');await qrScanner.start({facingMode:'environment'},{fps:10,qrbox:{width:220,height:220},aspectRatio:1.333334},(decodedText)=>{document.getElementById('code-input').value=decodedText.trim().toUpperCase();closeQrSheet();checkCode();},()=>{});}catch(error){console.error('QR start failed',error);showToast('Nepavyko paleisti kameros. Patikrink leidimus arba naudok rankinį įvedimą.');}}
+async function stopQrScanner(){if(!qrScanner) return;try{await qrScanner.stop();}catch(e){}try{await qrScanner.clear();}catch(e){}qrScanner=null;}
+function showPrize(){generateConfetti();generateQR();let prizeCode=localStorage.getItem(PRIZE_STORAGE_KEY);if(!prizeCode){prizeCode=generatePrizeCode();localStorage.setItem(PRIZE_STORAGE_KEY,prizeCode);}document.getElementById('prize-code').textContent=prizeCode;showScreen('prize');}
+function generatePrizeCode(){return `BT-DEMO-${Math.random().toString(36).slice(2,8).toUpperCase()}`;}
+function selectPrize(idx, el){document.querySelectorAll('.prize-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');}
+function generateQR(){const qr=document.getElementById('prize-qr');qr.innerHTML='';const pattern=[[1,1,1,1,1,1,1,0,1,0],[1,0,0,0,0,0,1,0,0,1],[1,0,1,1,1,0,1,0,1,0],[1,0,1,1,1,0,1,0,0,1],[1,0,1,1,1,0,1,0,1,1],[1,0,0,0,0,0,1,0,1,0],[1,1,1,1,1,1,1,0,1,0],[0,0,0,0,0,0,0,0,0,1],[1,0,1,1,0,1,1,0,1,0],[0,1,0,0,1,0,0,1,0,1]];pattern.forEach(row=>row.forEach(cell=>{const div=document.createElement('div');div.className='qr-cell';div.style.background=cell?'#1a2e1a':'transparent';qr.appendChild(div);}));}
+function generateConfetti(){const container=document.getElementById('confetti');container.innerHTML='';const colors=['#f0b840','#d4872a','#4a7c4a','#8fb88f','#f5f0e8'];for(let i=0;i<40;i++){const piece=document.createElement('div');piece.className='confetti-piece';piece.style.left=Math.random()*100+'%';piece.style.top=Math.random()*-20+'px';piece.style.background=colors[Math.floor(Math.random()*colors.length)];piece.style.width=(Math.random()*10+6)+'px';piece.style.height=(Math.random()*10+6)+'px';piece.style.animationDuration=(Math.random()*3+2)+'s';piece.style.animationDelay=(Math.random()*2)+'s';piece.style.borderRadius=Math.random()>0.5?'50%':'2px';container.appendChild(piece);}}
+function showToast(message){const toast=document.getElementById('status-toast');toast.textContent=message;toast.classList.add('show');clearTimeout(showToast._timer);showToast._timer=setTimeout(()=>toast.classList.remove('show'),2800);}
+function installApp(){if(!deferredInstallPrompt) return;deferredInstallPrompt.prompt();deferredInstallPrompt.userChoice.finally(()=>{deferredInstallPrompt=null;document.getElementById('install-btn').style.display='none';});}
+window.addEventListener('beforeinstallprompt',(event)=>{event.preventDefault();deferredInstallPrompt=event;document.getElementById('install-btn').style.display='inline-block';});
+window.addEventListener('appinstalled',()=>{deferredInstallPrompt=null;document.getElementById('install-btn').style.display='none';showToast('Programėlė įdiegta.');});
+if('serviceWorker' in navigator){window.addEventListener('load',()=>{navigator.serviceWorker.register('./sw.js').catch((error)=>console.warn('Service worker registration failed',error));});}
+document.addEventListener('DOMContentLoaded',()=>{loadProgress();updateMapUI();const input=document.getElementById('code-input');if(input) input.addEventListener('keydown',e=>{if(e.key==='Enter') checkCode();});initMap();});
 </script>
 </body>
 </html>
