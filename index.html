@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="lt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Širvintos keliauja</title>
+<meta name="theme-color" content="#1a3a1a">
+<meta name="description" content="Širvintų rajono miesteliai – pažink žaisdamas. Interaktyvūs QR maršrutai.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="assets/icons/icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --forest: #1a2e1a;
+  --moss: #2d4a2d;
+  --fern: #4a7c4a;
+  --sage: #8fb88f;
+  --cream: #f5f0e8;
+  --amber: #d4872a;
+  --gold: #f0b840;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var(--cream); min-height: 100vh; }
+
+/* HEADER */
+.header { text-align: center; padding: 2rem 1.5rem 1.5rem; }
+.header-inner { display: inline-flex; flex-direction: column; align-items: center; gap: 0.75rem; }
+.herbas { width: 64px; height: auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); }
+.site-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--cream); line-height: 1.1; }
+.site-sub { font-size: 0.85rem; color: var(--sage); letter-spacing: 0.06em; }
+
+/* GRID */
+.grid-wrap { padding: 0 1rem 2rem; max-width: 520px; margin: 0 auto; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+
+.card {
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  text-decoration: none;
+  display: block;
+  color: inherit;
+}
+.card:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
+.card.soon { opacity: 0.42; cursor: default; pointer-events: none; }
+
+.card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
+.card-name { font-weight: 500; font-size: 1rem; color: var(--cream); }
+.card-desc { font-size: 0.75rem; color: var(--sage); margin-top: 0.2rem; line-height: 1.4; }
+.card-meta { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.6rem; flex-wrap: wrap; }
+
+.badge {
+  font-size: 0.68rem;
+  padding: 2px 8px;
+  border-radius: 20px;
+  font-weight: 500;
+}
+.badge-active { background: rgba(99,153,34,0.2); color: #9ad99e; border: 1px solid rgba(99,153,34,0.3); }
+.badge-soon { background: rgba(255,255,255,0.06); color: rgba(245,240,232,0.4); border: 1px solid rgba(255,255,255,0.08); }
+
+/* FOOTER */
+.footer { text-align: center; padding: 1rem; font-size: 0.75rem; color: rgba(245,240,232,0.3); }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-inner">
+    <img class="herbas" src="assets/icons/herbas.png" alt="Širvintų herbas">
+    <h1 class="site-title">Širvintos keliauja</h1>
+    <p class="site-sub">Pažink rajono miestelius žaisdamas · QR maršrutai</p>
+  </div>
+</div>
+
+<div class="grid-wrap">
+  <div class="grid">
+
+    <a class="card" href="sirvintos/">
+      <span class="card-icon">🏙</span>
+      <div class="card-name">Širvintos</div>
+      <div class="card-desc">Rajono centras · marių pakrantė</div>
+      <div class="card-meta">
+        <span class="badge badge-active">5 stotelės</span>
+        <span class="badge badge-active">aktyvus</span>
+      </div>
+    </a>
+
+    <a class="card" href="kernave/">
+      <span class="card-icon">🏰</span>
+      <div class="card-name">Kernavė</div>
+      <div class="card-desc">UNESCO paveldas · piliakalniai</div>
+      <div class="card-meta">
+        <span class="badge badge-active">5 stotelės</span>
+        <span class="badge badge-active">aktyvus</span>
+      </div>
+    </a>
+
+    <div class="card soon">
+      <span class="card-icon">⛪</span>
+      <div class="card-name">Gelvonai</div>
+      <div class="card-desc">Senas miestelis · bažnyčia</div>
+      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
+    </div>
+
+    <div class="card soon">
+      <span class="card-icon">🌿</span>
+      <div class="card-name">Musninkai</div>
+      <div class="card-desc">Upių santaka · gamta</div>
+      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
+    </div>
+
+    <div class="card soon">
+      <span class="card-icon">🏞</span>
+      <div class="card-name">Čiobiškis</div>
+      <div class="card-desc">Neries pakrantė · dvaras</div>
+      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
+    </div>
+
+    <div class="card soon">
+      <span class="card-icon">🌾</span>
+      <div class="card-name">Zibalai</div>
+      <div class="card-desc">Kaimo tradicijos · laukai</div>
+      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
+    </div>
+
+    <div class="card soon">
+      <span class="card-icon">🌲</span>
+      <div class="card-name">Jauniūnai</div>
+      <div class="card-desc">Miškai · pažintiniai takai</div>
+      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
+    </div>
+
+    <div class="card soon">
+      <span class="card-icon">🦢</span>
+      <div class="card-name">Alionys</div>
+      <div class="card-desc">Širvintos upė · gamta</div>
+      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
+    </div>
+
+  </div>
+</div>
+
+<div class="footer">© 2026 Širvintos keliauja</div>
+
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('./sw.js').catch(e => console.warn('SW failed', e));
+  });
+}
+</script>
+</body>
+</html>
