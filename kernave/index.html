@@ -256,7 +256,7 @@ button, input { font: inherit; }
 <div class="toast" id="toast"></div>
 
 <script src="../config.js"></script>
-<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 const STOPS = [
   {
@@ -472,16 +472,30 @@ function showFallbackMap(msg) {
 }
 
 async function openQr() {
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+    toast('⚠️ Kamera veikia tik per HTTPS. Įvesk kodą ranka.'); return;
+  }
   document.getElementById('qr-sheet').classList.add('open');
-  if (typeof Html5Qrcode === 'undefined') { toast('QR biblioteka neužsikrovė.'); return; }
+  if (typeof Html5Qrcode === 'undefined') { toast('QR biblioteka neužsikrovė. Atnaujink puslapį.'); return; }
   try {
-    if (qrScanner) { try { await qrScanner.stop(); } catch(e) {} try { await qrScanner.clear(); } catch(e) {} }
+    if (qrScanner) { try { await qrScanner.stop(); } catch(e) {} try { await qrScanner.clear(); } catch(e) {} qrScanner = null; }
     qrScanner = new Html5Qrcode('qr-reader');
-    await qrScanner.start({ facingMode: 'environment' }, { fps: 10, qrbox: { width: 200, height: 200 } }, decoded => {
-      document.getElementById('code-input').value = decoded.trim().toUpperCase();
-      closeQr(); checkCode();
-    }, () => {});
-  } catch(e) { toast('Nepavyko paleisti kameros. Naudok rankinį įvedimą.'); }
+    const cameras = await Html5Qrcode.getCameras();
+    if (!cameras || cameras.length === 0) { toast('Kamera nerasta. Įvesk kodą ranka.'); closeQr(); return; }
+    const cameraId = cameras.length > 1 ? cameras[cameras.length - 1].id : cameras[0].id;
+    await qrScanner.start(
+      cameraId,
+      { fps: 10, qrbox: { width: 220, height: 220 } },
+      decoded => { document.getElementById('code-input').value = decoded.trim().toUpperCase(); closeQr(); checkCode(); },
+      () => {}
+    );
+  } catch(e) {
+    console.error('QR error:', e);
+    const msg = e.toString().toLowerCase().includes('permission')
+      ? '📷 Leisk kamerą naršyklės nustatymuose ir bandyk dar kartą.'
+      : 'Nepavyko paleisti kameros. Įvesk kodą ranka.';
+    toast(msg); closeQr();
+  }
 }
 
 async function closeQr() {
