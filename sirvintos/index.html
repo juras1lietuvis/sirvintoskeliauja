@@ -8,6 +8,7 @@
 <meta name="description" content="Interaktyvus Širvintų miesto maršrutas – 6 stotelės, QR kodai, švietėjiška informacija.">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
@@ -238,7 +239,7 @@ button, input { font: inherit; }
 
 <div class="toast" id="toast"></div>
 
-<script src="../config.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
 <script>
 const STOPS = [
@@ -295,8 +296,8 @@ const STOPS = [
 const KEY = 'sk_sirvintos_v1';
 let collected = new Array(STOPS.length).fill(false);
 let currentStop = 0;
-let map = null, markers = [], infoWindow = null, userMarker = null;
-let mapReady = false, usingGoogle = false, qrScanner = null;
+let map = null, markers = [], userMarker = null;
+let mapReady = false, qrScanner = null;
 
 function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
@@ -438,47 +439,57 @@ function shareResult() {
 
 function initMap() {
   mapReady = true;
-  const key = (window.BRIEDZIU_CONFIG && window.BRIEDZIU_CONFIG.GOOGLE_MAPS_API_KEY || '').trim();
-  if (key && key !== 'PASTE_YOUR_GOOGLE_MAPS_API_KEY_HERE') {
-    const s = document.createElement('script');
-    s.src = `https://maps.googleapis.com/maps/api/js?key=${encodeURIComponent(key)}&v=weekly`;
-    s.async = true; s.defer = true;
-    s.onload = () => { usingGoogle = true; createGoogleMap(); renderMarkers(); fitAll(); centerOnUser(false); };
-    s.onerror = () => showFallbackMap('Nepavyko užkrauti Google Maps.');
-    document.head.appendChild(s);
-  } else { showFallbackMap('config.js faile dar neįvestas Google Maps API raktas.'); }
+  const container = document.getElementById('real-map');
+  map = L.map(container, { zoomControl: true, attributionControl: false }).setView([55.041, 24.961], 14);
+
+  const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
+  const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
+
+  osm.addTo(map);
+
+  L.control.attribution({ prefix: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
+
+  // Sluoksnių perjungimo mygtukas
+  let isSatellite = false;
+  const layerBtn = L.control({ position: 'topright' });
+  layerBtn.onAdd = function() {
+    const btn = L.DomUtil.create('button', '');
+    btn.innerHTML = '🛰 Palydovas';
+    btn.style.cssText = 'background:#2d4a2d;color:#f5f0e8;border:1px solid rgba(143,184,143,0.4);border-radius:8px;padding:5px 10px;font-size:12px;font-weight:500;cursor:pointer;font-family:inherit;';
+    L.DomEvent.on(btn, 'click', function(e) {
+      L.DomEvent.stopPropagation(e);
+      isSatellite = !isSatellite;
+      if (isSatellite) { map.removeLayer(osm); satellite.addTo(map); btn.innerHTML = '🗺 Žemėlapis'; btn.style.background = '#1a3a1a'; }
+      else { map.removeLayer(satellite); osm.addTo(map); btn.innerHTML = '🛰 Palydovas'; btn.style.background = '#2d4a2d'; }
+      renderMarkers();
+    });
+    return btn;
+  };
+  layerBtn.addTo(map);
+
+  renderMarkers();
+  fitAll();
+  centerOnUser(false);
 }
 
-function createGoogleMap() {
-  map = new google.maps.Map(document.getElementById('real-map'), {
-    center: { lat: 55.041, lng: 24.961 }, zoom: 14,
-    mapTypeControl: false, streetViewControl: false, fullscreenControl: false
+function makeIcon(label, isDone) {
+  return L.divIcon({
+    className: '',
+    html: `<div style="width:34px;height:34px;border-radius:50%;background:${isDone ? '#d4872a' : '#2d4a2d'};border:2px solid ${isDone ? '#f0b840' : '#8fb88f'};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:${isDone ? '#1a2e1a' : '#f5f0e8'};box-shadow:0 2px 6px rgba(0,0,0,0.4);">${label}</div>`,
+    iconSize: [34, 34],
+    iconAnchor: [17, 17],
+    popupAnchor: [0, -20]
   });
-  infoWindow = new google.maps.InfoWindow();
 }
 
 function renderMarkers() {
-  if (!usingGoogle || !map) return;
-  markers.forEach(m => m.setMap(null)); markers = [];
+  if (!map) return;
+  markers.forEach(m => map.removeLayer(m)); markers = [];
   STOPS.forEach((s, i) => {
     const isDone = collected[i];
-    const m = new google.maps.Marker({
-      position: { lat: s.lat, lng: s.lng }, map,
-      title: s.name,
-      label: { text: isDone ? '✓' : String(i + 1), color: isDone ? '#1a2e1a' : '#f5f0e8', fontWeight: '700' },
-      icon: {
-        path: google.maps.SymbolPath.CIRCLE,
-        scale: 18,
-        fillColor: isDone ? '#d4872a' : '#2d4a2d',
-        fillOpacity: 1,
-        strokeColor: isDone ? '#f0b840' : '#8fb88f',
-        strokeWeight: 2
-      }
-    });
-    m.addListener('click', () => {
-      infoWindow.setContent(`<div style="color:#111;min-width:160px"><b>${i+1}. ${s.name}</b><br><small style="color:#555">${s.hint}</small><br><br><button onclick="window.__openStop(${i})" style="padding:6px 10px;border:none;border-radius:8px;background:#d4872a;color:#fff;cursor:pointer;font-weight:700">Atidaryti →</button></div>`);
-      infoWindow.open({ map, anchor: m });
-    });
+    const m = L.marker([s.lat, s.lng], { icon: makeIcon(isDone ? '✓' : String(i + 1), isDone) })
+      .addTo(map)
+      .bindPopup(`<div style="min-width:160px"><b>${i+1}. ${s.name}</b><br><small style="color:#555">${s.hint}</small><br><br><button onclick="window.__openStop(${i})" style="padding:6px 10px;border:none;border-radius:8px;background:#d4872a;color:#fff;cursor:pointer;font-weight:700;margin-top:4px">Atidaryti →</button></div>`);
     markers.push(m);
   });
 }
@@ -486,29 +497,24 @@ function renderMarkers() {
 window.__openStop = function(i) { openStop(i); };
 
 function fitAll() {
-  if (!usingGoogle || !map) return;
-  const b = new google.maps.LatLngBounds();
-  STOPS.forEach(s => b.extend({ lat: s.lat, lng: s.lng }));
-  map.fitBounds(b, 60);
+  if (!map) return;
+  const bounds = L.latLngBounds(STOPS.map(s => [s.lat, s.lng]));
+  map.fitBounds(bounds, { padding: [40, 40] });
 }
 
 function centerOnUser(show = true) {
   if (!navigator.geolocation) { if (show) toast('Naršyklė nepalaiko lokacijos.'); return; }
   navigator.geolocation.getCurrentPosition(pos => {
-    const p = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-    if (usingGoogle && map) {
-      if (userMarker) userMarker.setMap(null);
-      userMarker = new google.maps.Marker({ position: p, map, title: 'Jūsų vieta', icon: { path: google.maps.SymbolPath.CIRCLE, scale: 8, fillColor: '#2d7cf6', fillOpacity: 1, strokeColor: '#fff', strokeWeight: 2 } });
-      map.panTo(p); map.setZoom(15);
+    const { latitude: lat, longitude: lng } = pos.coords;
+    if (map) {
+      if (userMarker) map.removeLayer(userMarker);
+      userMarker = L.circleMarker([lat, lng], {
+        radius: 8, fillColor: '#2d7cf6', fillOpacity: 1, color: '#fff', weight: 2
+      }).addTo(map).bindPopup('Jūsų vieta');
+      map.setView([lat, lng], 15);
     }
     if (show) toast('Lokacija atnaujinta.');
   }, () => { if (show) toast('Nepavyko gauti lokacijos.'); }, { enableHighAccuracy: true, timeout: 10000 });
-}
-
-function showFallbackMap(msg) {
-  const c = document.getElementById('real-map');
-  c.style.cssText = 'display:flex;align-items:center;justify-content:center;padding:16px;';
-  c.innerHTML = `<div style="background:rgba(10,20,10,0.7);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1rem;text-align:center;color:#f5f0e8;max-width:300px"><div style="font-size:1.5rem;margin-bottom:6px">🗺️</div><div style="font-size:0.82rem;opacity:0.8">${msg}</div></div>`;
 }
 
 async function openQr() {
