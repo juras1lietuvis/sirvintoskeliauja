@@ -82,6 +82,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var
   <div class="drawer-info">
     <div class="info-row"><span class="info-lbl">Adresas</span><span class="info-val" id="d-addr"></span></div>
     <div class="info-row"><span class="info-lbl">Tel.</span><span class="info-val" id="d-tel"></span></div>
+    <div class="info-row" id="d-hours-row" style="display:none"><span class="info-lbl">Laikas</span><span class="info-val" id="d-hours"></span></div>
     <div class="info-row" id="d-web-row"><span class="info-lbl">Svetainė</span><span class="info-val" id="d-web"></span></div>
   </div>
   <div class="drawer-btns">
@@ -108,6 +109,12 @@ const PLACES = [
   { cat:'Dvasingumas', name:'Namgyal Stupa ir meditacijos parkas', desc:'Tibetietiška stupa, simbolizuojanti nušvitimą. Ekskursijos su gidu, meditacija, tibeto vienuolių ritualai. Veikia gegužė–lapkritis, penktadienis–sekmadienis. Būtina išankstinė registracija.', addr:'Rusokų k. 3, Musninkų sen.', tel:'+370 618 79700', web:'www.pagoda.lt', webUrl:'https://www.pagoda.lt', lat:55.094, lng:24.921 },
   { cat:'Gamta', name:'„Miško briedis" – ūkis ir miško mokykla', desc:'Neformalaus ugdymo veiklos gamtoje. Vaikų stovyklos, užsiėmimai mokinių grupėms, mokymai pedagogams. Pasivaikščiojimai su alpakomis.', addr:'Vičiūnų k., Kernavės sen.', tel:'+370 641 33555', web:'www.miskobriedis.lt', webUrl:'https://www.miskobriedis.lt', lat:54.921, lng:24.861 },
   { cat:'Kūryba', name:'Keramikos dirbtuvės „Medilių vėjai"', desc:'Keramikos dirbtuvės – pasigaminkite norimus keramikos gaminius. Tinka šeimoms, grupėms, įmonių renginiams.', addr:'Širvintų raj.', tel:'–', web:'–', webUrl:'', lat:55.043, lng:24.954 },
+  { cat:'Kavinės ir restoranai', name:'Kavinė „Terasa"', desc:'Kava, lengvi užkandžiai, desertai. Jauki erdvė pietų pertraukai ar pasėdėjimui po pasivaikščiojimo.', addr:'I. Šeiniaus g. 4, Širvintos', tel:'–', web:'–', webUrl:'', hours:'I–V: 09:00–18:00, VI–VII: 10:00–18:00', lat:55.0415, lng:24.9582 },
+  { cat:'Kavinės ir restoranai', name:'Alkanas Briedis', desc:'Europietiška virtuvė – sotūs pietūs ir vakarienė. Puikus pasirinkimas po maršruto!', addr:'Vilniaus g. 76, Širvintos', tel:'–', web:'–', webUrl:'', hours:'I–VII: 11:00–21:00', lat:55.0421, lng:24.9573 },
+  { cat:'Kavinės ir restoranai', name:'Debut Pizza', desc:'Picos ir itališkas maistas. Tinka greitam užkandžiui ar vakarienei su šeima.', addr:'Vilniaus g. 77, Širvintos', tel:'–', web:'–', webUrl:'', hours:'I–VII: 10:00–22:00', lat:55.0422, lng:24.9571 },
+  { cat:'Kavinės ir restoranai', name:'Kavinė Lelija', desc:'Tradiciniai lietuviški patiekalai. Namų virtuvės jausmas miesto centre.', addr:'Plento g. 54, Širvintos', tel:'–', web:'–', webUrl:'', hours:'I–IV: 10:00–17:00, V: 09:00–17:00, VI: 09:00–15:00, VII: nedirbа', lat:55.0408, lng:24.9601 },
+  { cat:'Kavinės ir restoranai', name:'Valgykla Veivera', desc:'Greiti dienos pietūs – paprasta, greita, sotų. Tinka darbo dienomis.', addr:'I. Šeiniaus g. 12, Širvintos', tel:'–', web:'–', webUrl:'', hours:'I–V: 10:00–15:00, VI–VII: nedirbа', lat:55.0416, lng:24.9579 },
+  { cat:'Kavinės ir restoranai', name:'Debut Bistro Širvintos', desc:'Maitinimas vietoje ir maistas išsinešti. Greita ir skanu bet kuriuo paros metu.', addr:'Kalnalaukio g. 41, Širvintos', tel:'–', web:'–', webUrl:'', hours:'I–VII: 11:00–22:00', lat:55.0431, lng:24.9548 },
 ];
 
 let activeFilter = 'Visi';
@@ -152,6 +159,9 @@ function openDrawer(i) {
   document.getElementById('d-addr').textContent = p.addr;
   document.getElementById('d-tel').textContent = p.tel;
   document.getElementById('d-web').textContent = p.web;
+  const hoursRow = document.getElementById('d-hours-row');
+  if (p.hours) { document.getElementById('d-hours').textContent = p.hours; hoursRow.style.display = 'flex'; }
+  else { hoursRow.style.display = 'none'; }
   document.getElementById('d-map-btn').onclick = () => window.open(`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`, '_blank');
   const webBtn = document.getElementById('d-web-btn');
   if (p.webUrl) { webBtn.href = p.webUrl; webBtn.style.opacity = '1'; webBtn.style.pointerEvents = 'auto'; }
