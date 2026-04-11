@@ -1,4 +1,4 @@
-const CACHE = 'sk-v1';
+const CACHE = 'sk-v2';
 const ASSETS = [
   '/',
   '/index.html',
