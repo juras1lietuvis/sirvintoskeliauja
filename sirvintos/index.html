@@ -137,7 +137,7 @@ button, input { font: inherit; }
     <span class="topbar-icon">🦌</span>
   </div>
   <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-  <div class="progress-label" id="progress-label">0 iš 6 stotelių surinkta · rink bet kokia tvarka</div>
+  <div class="progress-label" id="progress-label">0 iš 6 stotelių surinkta · rinkk bet kokia tvarka</div>
 
   <div class="map-area">
     <div id="real-map"></div>
@@ -154,7 +154,7 @@ button, input { font: inherit; }
   </div>
 
   <div class="stops-list">
-    <div class="region-label">📍 Širvintos · 6 stotelės · rink bet kokia tvarka</div>
+    <div class="region-label">📍 Širvintos · 6 stotelės · rinkk bet kokia tvarka</div>
     <div id="stops-list-inner"></div>
   </div>
 </div>
@@ -216,7 +216,7 @@ button, input { font: inherit; }
     <span class="prize-big-icon">🦌</span>
     <h2 class="prize-title">Sveikiname!</h2>
     <p class="prize-title-lt">„Širvintų Briedis"</p>
-    <p class="prize-desc">Suradai visas 6 Širvintų stotelės ir tapai tikru miesto pažinėju!<br>Nuo skulptūros prie upės iki grojaničio fontano – tu perėjai visą Širvintų širdį.</p>
+    <p class="prize-desc">Suradai visas 6 Širvintų stoteles ir tapai tikru miesto pažinėju!<br>Nuo skulptūros prie upės iki grojančio fontano – tu perėjai visą Širvintų širdį.</p>
     <div class="prize-share">
       <button class="btn-share" onclick="shareResult()">📤 Pasidalink</button>
       <button class="btn-share" onclick="showScreen('map')">🗺 Grįžti</button>
@@ -338,9 +338,9 @@ function updateUI() {
     document.getElementById('map-overlay-title').textContent = 'Maršrutas įveiktas! 🦌';
     document.getElementById('map-overlay-text').textContent = 'Sveikiname – tu tikras Širvintų pažinėjas!';
   } else {
-    document.getElementById('progress-label').textContent = `${done} iš ${total} stotelių surinkta · rink bet kokia tvarka`;
+    document.getElementById('progress-label').textContent = `${done} iš ${total} stotelių surinkta · rinkk bet kokia tvarka`;
     document.getElementById('map-overlay-title').textContent = `${done} / ${total} stotelių surinkta`;
-    document.getElementById('map-overlay-text').textContent = 'Visos stotelės atviros – rink bet kokia tvarka!';
+    document.getElementById('map-overlay-text').textContent = 'Visos stotelės atviros – rinkk bet kokia tvarka!';
   }
 
   const list = document.getElementById('stops-list-inner');
@@ -431,7 +431,7 @@ function generateConfetti() {
 
 function shareResult() {
   if (navigator.share) {
-    navigator.share({ title: 'Širvintos keliauja', text: 'Surinkai visas 6 Širvintų stoteles ir tapau „Širvintų Briedžiu"! 🦌', url: location.href });
+    navigator.share({ title: 'Širvintos keliauja', text: 'Surinkau visas 6 Širvintų stoteles ir tapau „Širvintų Briedžiu"! 🦌', url: location.href });
   } else {
     toast('Nukopijuok nuorodą ir pasidalink!');
   }
