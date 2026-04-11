@@ -23,19 +23,24 @@
 body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var(--cream); min-height: 100vh; }
 
 /* HEADER */
-.header { text-align: center; padding: 2rem 1.5rem 1.5rem; }
-.header-inner { display: inline-flex; flex-direction: column; align-items: center; gap: 0.75rem; }
-.herbas { width: 64px; height: auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); }
-.site-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--cream); line-height: 1.1; }
-.site-sub { font-size: 0.85rem; color: var(--sage); letter-spacing: 0.06em; }
+.header { text-align: center; padding: 2.5rem 1.5rem 1.8rem; }
+.header-inner { display: inline-flex; flex-direction: column; align-items: center; gap: 0.6rem; }
+.herbas { width: 56px; height: auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); margin-bottom: 0.2rem; }
+.site-title { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; color: var(--cream); line-height: 1.1; }
+.site-divider { width: 40px; height: 2px; background: var(--amber); border-radius: 2px; margin: 0.2rem auto; }
+.site-tagline { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; color: var(--gold); letter-spacing: 0.02em; }
+.site-desc { font-size: 0.88rem; color: rgba(245,240,232,0.65); line-height: 1.6; max-width: 280px; text-align: center; }
+
+/* SECTION LABEL */
+.section-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sage); padding: 0 1rem 0.6rem; max-width: 520px; margin: 0 auto; }
 
 /* GRID */
 .grid-wrap { padding: 0 1rem 2rem; max-width: 520px; margin: 0 auto; }
 .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 
 .card {
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
   border-radius: 16px;
   padding: 1rem;
   cursor: pointer;
@@ -44,21 +49,16 @@ body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var
   display: block;
   color: inherit;
 }
-.card:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.18); transform: translateY(-2px); }
-.card.soon { opacity: 0.42; cursor: default; pointer-events: none; }
+.card:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
+.card.soon { opacity: 0.38; cursor: default; pointer-events: none; }
 
 .card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
 .card-name { font-weight: 500; font-size: 1rem; color: var(--cream); }
 .card-desc { font-size: 0.75rem; color: var(--sage); margin-top: 0.2rem; line-height: 1.4; }
 .card-meta { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.6rem; flex-wrap: wrap; }
 
-.badge {
-  font-size: 0.68rem;
-  padding: 2px 8px;
-  border-radius: 20px;
-  font-weight: 500;
-}
-.badge-active { background: rgba(99,153,34,0.2); color: #9ad99e; border: 1px solid rgba(99,153,34,0.3); }
+.badge { font-size: 0.68rem; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
+.badge-active { background: rgba(240,184,64,0.12); color: var(--gold); border: 1px solid rgba(240,184,64,0.4); }
 .badge-soon { background: rgba(255,255,255,0.06); color: rgba(245,240,232,0.4); border: 1px solid rgba(255,255,255,0.08); }
 
 /* LANKYTINOS CARD */
@@ -81,9 +81,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var
   <div class="header-inner">
     <img class="herbas" src="assets/icons/herbas.png" alt="Širvintų herbas">
     <h1 class="site-title">Širvintos keliauja</h1>
-    <p class="site-sub">Pažink rajono miestelius žaisdamas · QR maršrutai</p>
+    <div class="site-divider"></div>
+    <p class="site-tagline">Meilės, miškų ir legendų maršrutai</p>
+    <p class="site-desc">Atrask Širvintas žaisdamas. Kiekviena stotelė – naujas istorijos puslapis.</p>
   </div>
 </div>
+
+<div class="section-label">Pasirink maršrutą</div>
 
 <div class="grid-wrap">
   <div class="grid">
