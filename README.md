@@ -7,19 +7,12 @@ Interaktyvūs QR maršrutai po Širvintų rajono miestelius.
 ```
 /                        ← Pradžios ekranas (miestelių pasirinkimas)
 /kernave/                ← Kernavės maršrutas (5 stotelės)
-/sirvintos/              ← Širvintų maršrutas (5 stotelės)
+/sirvintos/              ← Širvintų maršrutas (6 stotelės)
 /assets/icons/           ← Herbas ir PWA ikonos
 /config.js               ← Google Maps API raktas
 /manifest.webmanifest    ← PWA aprašas
 /sw.js                   ← Service worker (offline palaikymas)
 ```
-
-## Paleidimas
-
-1. **config.js** – įrašyk Google Maps API raktą
-2. **assets/icons/** – įdėk `icon-192.png` ir `icon-512.png` (PWA ikonoms)
-3. Viską įkelk į GitHub repo, įjunk **GitHub Pages** (Settings → Pages → main branch)
-4. Nukreipk `sirvintoskeliauja.lt` domeną į GitHub Pages
 
 ## Pridėti naują miestelį
 
@@ -30,14 +23,14 @@ Interaktyvūs QR maršrutai po Širvintų rajono miestelius.
 
 ## QR kodai
 
-Kiekviena stotelė turi unikalų kodą (pvz. `K001`, `K002`...).
+Kiekviena stotelė turi unikalų kodą (pvz. `K001`, `S001`...).
 QR kodas turi koduoti tik šį tekstą – generuok per qr-code-generator.com ar pan.
 
 ## Miesteliai
 
 | Miestelis  | Aplankas     | Stotelės | Būsena   |
 |------------|--------------|----------|----------|
-| Širvintos  | /sirvintos/  | 5        | aktyvus  |
+| Širvintos  | /sirvintos/  | 6        | aktyvus  |
 | Kernavė    | /kernave/    | 5        | aktyvus  |
 | Gelvonai   | /gelvonai/   | -        | netrukus |
 | Musninkai  | /musninkai/  | -        | netrukus |
