@@ -24,173 +24,95 @@
 <link rel="apple-touch-icon" href="assets/icons/icon-192.png">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
-:root {
-  --forest: #1a2e1a;
-  --moss: #2d4a2d;
-  --fern: #4a7c4a;
-  --sage: #8fb88f;
-  --cream: #f5f0e8;
-  --amber: #d4872a;
-  --gold: #f0b840;
-}
+:root { --forest: #1a2e1a; --moss: #2d4a2d; --fern: #4a7c4a; --sage: #8fb88f; --cream: #f5f0e8; --amber: #d4872a; --gold: #f0b840; }
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var(--cream); min-height: 100vh; }
-
-/* HEADER */
-.header { text-align: center; padding: 2.5rem 1.5rem 1.8rem; }
-.header-inner { display: inline-flex; flex-direction: column; align-items: center; gap: 0.6rem; }
-.herbas { width: 56px; height: auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.4)); margin-bottom: 0.2rem; }
-.site-title { font-family: 'Playfair Display', serif; font-size: 2.4rem; font-weight: 700; color: var(--cream); line-height: 1.1; }
-.site-divider { width: 40px; height: 2px; background: var(--amber); border-radius: 2px; margin: 0.2rem auto; }
-.site-tagline { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1rem; color: var(--gold); letter-spacing: 0.02em; }
-.site-desc { font-size: 0.88rem; color: rgba(245,240,232,0.65); line-height: 1.6; max-width: 280px; text-align: center; }
-
-/* SECTION LABEL */
-.section-label { font-size: 0.68rem; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--sage); padding: 0 1rem 0.6rem; max-width: 520px; margin: 0 auto; }
-
-/* GRID */
-.grid-wrap { padding: 0 1rem 2rem; max-width: 520px; margin: 0 auto; }
-.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
-
-.card {
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  border-radius: 16px;
-  padding: 1rem;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s, transform 0.15s;
-  text-decoration: none;
-  display: block;
-  color: inherit;
-}
-.card:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); transform: translateY(-2px); }
-.card.soon { opacity: 0.38; cursor: default; pointer-events: none; }
-
-.card-icon { font-size: 1.6rem; margin-bottom: 0.5rem; display: block; }
-.card-name { font-weight: 500; font-size: 1rem; color: var(--cream); }
-.card-desc { font-size: 0.75rem; color: var(--sage); margin-top: 0.2rem; line-height: 1.4; }
-.card-meta { display: flex; align-items: center; gap: 0.4rem; margin-top: 0.6rem; flex-wrap: wrap; }
-
-.badge { font-size: 0.68rem; padding: 2px 8px; border-radius: 20px; font-weight: 500; }
-.badge-active { background: rgba(240,184,64,0.12); color: var(--gold); border: 1px solid rgba(240,184,64,0.4); }
-.badge-soon { background: rgba(255,255,255,0.06); color: rgba(245,240,232,0.4); border: 1px solid rgba(255,255,255,0.08); }
-
-/* LANKYTINOS CARD */
-.lankytinos-wrap { padding: 0 1rem 1.5rem; max-width: 520px; margin: 0 auto; }
-.card-full { display: flex; align-items: center; gap: 1rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 1rem 1.2rem; text-decoration: none; color: inherit; transition: background 0.2s, border-color 0.2s; }
-.card-full:hover { background: rgba(255,255,255,0.09); border-color: rgba(255,255,255,0.15); }
-.card-full-icon { font-size: 1.8rem; flex-shrink: 0; }
-.card-full-info { flex: 1; }
-.card-full-name { font-weight: 500; font-size: 1rem; color: var(--cream); }
-.card-full-desc { font-size: 0.78rem; color: var(--sage); margin-top: 2px; }
-.card-full-arrow { font-size: 1rem; color: var(--sage); }
-
-/* FOOTER */
-.footer { text-align: center; padding: 1rem; font-size: 0.75rem; color: rgba(245,240,232,0.3); }
+.header { text-align: center; padding: 4rem 1rem 3rem; background: linear-gradient(to bottom, var(--moss), var(--forest)); border-bottom: 1px solid rgba(255,255,255,0.05); }
+.header h1 { font-family: 'Playfair Display', serif; font-size: 2.8rem; margin-bottom: 0.5rem; letter-spacing: -1px; }
+.header p { color: var(--sage); font-size: 1.1rem; font-weight: 300; }
+.container { max-width: 600px; margin: 0 auto; padding: 2rem 1rem 5rem; }
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+.card { background: var(--moss); border-radius: 16px; padding: 1.5rem; text-decoration: none; color: inherit; transition: all 0.2s ease; border: 1px solid rgba(255,255,255,0.05); display: flex; flex-direction: column; align-items: center; text-align: center; }
+.card:active { transform: scale(0.97); background: var(--fern); }
+.card-icon { font-size: 2.2rem; margin-bottom: 0.8rem; }
+.card-name { font-weight: 500; font-size: 1.1rem; margin-bottom: 0.3rem; }
+.card-desc { font-size: 0.85rem; color: var(--sage); font-weight: 300; }
+.card.soon { opacity: 0.6; pointer-events: none; }
+.badge { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.5px; padding: 3px 8px; border-radius: 10px; margin-top: 0.8rem; font-weight: 500; }
+.badge-active { background: rgba(240,184,64,0.15); color: var(--gold); }
+.badge-soon { background: rgba(255,255,255,0.08); color: rgba(255,255,255,0.4); }
+.lankytinos-wrap { margin-top: 1rem; }
+.card-full { background: linear-gradient(135deg, var(--moss), #345c34); border-radius: 20px; padding: 1.5rem; text-decoration: none; color: inherit; display: flex; align-items: center; gap: 1.2rem; border: 1px solid rgba(240,184,64,0.15); position: relative; overflow: hidden; }
+.card-full-icon { font-size: 1.8rem; }
+.card-full-name { font-weight: 500; font-size: 1.1rem; margin-bottom: 0.2rem; }
+.card-full-desc { font-size: 0.85rem; color: var(--sage); }
+.card-full-arrow { margin-left: auto; font-size: 1.2rem; opacity: 0.5; }
 </style>
 </head>
 <body>
 
 <div class="header">
-  <div class="header-inner">
-    <img class="herbas" src="assets/icons/herbas.png" alt="Å irvintÅ³ herbas">
-    <h1 class="site-title">Å irvintos keliauja</h1>
-    <div class="site-divider"></div>
-    <p class="site-tagline">MeilÄ—s, miÅ¡kÅ³ ir legendÅ³ marÅ¡rutai</p>
-    <p class="site-desc">Atrask Å irvintas Å¾aisdamas. Kiekviena stotelÄ— â€“ naujas istorijos puslapis.</p>
-  </div>
+  <h1>Širvintos keliauja</h1>
+  <p>Meilės, miškų ir legendų maršrutai</p>
 </div>
 
-<div class="section-label">Pasirink marÅ¡rutÄ…</div>
-
-<div class="grid-wrap">
+<div class="container">
   <div class="grid">
-
-    <a class="card" href="sirvintos/">
-      <span class="card-icon">ðŸ™</span>
-      <div class="card-name">Å irvintos</div>
-      <div class="card-desc">Rajono centras Â· mariÅ³ pakrantÄ—</div>
-      <div class="card-meta">
-        <span class="badge badge-active">6 stotelÄ—s</span>
-        <span class="badge badge-active">aktyvus</span>
-      </div>
+    <a href="sirvintos/" class="card">
+      <span class="card-icon">🦌</span>
+      <div class="card-name">Širvintos</div>
+      <div class="card-desc">Miesto legenda · 6 stotys</div>
+      <div class="card-meta"><span class="badge badge-active">atvira</span></div>
     </a>
 
-    <a class="card" href="kernave/">
-      <span class="card-icon">ðŸ°</span>
-      <div class="card-name">KernavÄ—</div>
-      <div class="card-desc">UNESCO paveldas Â· piliakalniai</div>
-      <div class="card-meta">
-        <span class="badge badge-active">5 stotelÄ—s</span>
-        <span class="badge badge-active">aktyvus</span>
-      </div>
+    <a href="kernave/" class="card">
+      <span class="card-icon">🏰</span>
+      <div class="card-name">Kernavė</div>
+      <div class="card-desc">Valstybingumo šaknys · 5 stotys</div>
+      <div class="card-meta"><span class="badge badge-active">atvira</span></div>
     </a>
 
     <div class="card soon">
-      <span class="card-icon">â›ª</span>
-      <div class="card-name">Gelvonai</div>
-      <div class="card-desc">Senas miestelis Â· baÅ¾nyÄia</div>
-      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
-    </div>
-
-    <div class="card soon">
-      <span class="card-icon">ðŸŒ¿</span>
-      <div class="card-name">Musninkai</div>
-      <div class="card-desc">UpiÅ³ santaka Â· gamta</div>
-      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
-    </div>
-
-    <div class="card soon">
-      <span class="card-icon">ðŸž</span>
-      <div class="card-name">ÄŒiobiÅ¡kis</div>
-      <div class="card-desc">Neries pakrantÄ— Â· dvaras</div>
-      <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
-    </div>
-
-    <div class="card soon">
-      <span class="card-icon">ðŸŒ¾</span>
+      <span class="card-icon">🌾</span>
       <div class="card-name">Zibalai</div>
-      <div class="card-desc">Kaimo tradicijos Â· laukai</div>
+      <div class="card-desc">Kaimo tradicijos · laukai</div>
       <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
     </div>
 
     <div class="card soon">
-      <span class="card-icon">ðŸŒ²</span>
-      <div class="card-name">JauniÅ«nai</div>
-      <div class="card-desc">MiÅ¡kai Â· paÅ¾intiniai takai</div>
+      <span class="card-icon">🌲</span>
+      <div class="card-name">Jauniūnai</div>
+      <div class="card-desc">Miškai · pažintiniai takai</div>
       <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
     </div>
 
     <div class="card soon">
-      <span class="card-icon">ðŸ¦¢</span>
+      <span class="card-icon">🦢</span>
       <div class="card-name">Alionys</div>
-      <div class="card-desc">Å irvintos upÄ— Â· gamta</div>
+      <div class="card-desc">Širvintos upė · gamta</div>
       <div class="card-meta"><span class="badge badge-soon">netrukus</span></div>
     </div>
+  </div>
 
+  <div class="lankytinos-wrap">
+    <a class="card-full" href="lankytinos/">
+      <span class="card-full-icon">📍</span>
+      <div class="card-full-info">
+        <div class="card-full-name">Lankytinos vietos ir veiklos</div>
+        <div class="card-full-desc">Muziejai, pramogos, kavinės · 23 objektai</div>
+      </div>
+      <span class="card-full-arrow">→</span>
+    </a>
   </div>
 </div>
-
-<div class="lankytinos-wrap">
-  <a class="card-full" href="lankytinos/">
-    <span class="card-full-icon">ðŸ“</span>
-    <div class="card-full-info">
-      <div class="card-full-name">Lankytinos vietos ir veiklos</div>
-      <div class="card-full-desc">Muziejai, pramogos, kavinÄ—s Â· 23 objektai</div>
-    </div>
-    <span class="card-full-arrow">â†’</span>
-  </a>
-</div>
-
-<div class="footer">Â© 2026 Å irvintos keliauja Â· SukÅ«rÄ— Juras StasiÅ«nas</div>
 
 <script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('./sw.js').catch(e => console.warn('SW failed', e));
-  });
-}
+  if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('/sw.js').catch(err => console.log('SW error:', err));
+    });
+  }
 </script>
+
 </body>
 </html>
-
