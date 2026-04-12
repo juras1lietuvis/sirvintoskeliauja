@@ -10,9 +10,46 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Širvintos · Širvintos keliauja</title>
+
+<!-- ══ SEO ══ -->
+<title>Širvintos maršrutas – lankytinos vietos ir QR žaidimas · Širvintos keliauja</title>
+<meta name="description" content="Atraskite gražiausias lankytinas vietas Širvintose žaisdami! Skulptūra Širvinta, Briedžių takas, Jaunimo sodas, centrinė aikštė su fontanu. 6 stotelės, QR kodai, nemokama.">
+<meta name="keywords" content="Širvintos lankytinos vietos, ką veikti Širvintose, Briedžių takas, Širvintų tvenkinys, Širvintų maršrutas, turistiniai takai Širvintos">
+<meta name="author" content="Juras Stasiūnas">
+<link rel="canonical" href="https://sirvintoskeliauja.lt/sirvintos/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sirvintoskeliauja.lt/sirvintos/">
+<meta property="og:title" content="Širvintos maršrutas – interaktyvus QR žaidimas po miestą">
+<meta property="og:description" content="Atraskite įdomiausias lankytinas vietas Širvintose žaisdami! Nuo skulptūros prie tvenkinio iki Briedžių tako – 6 stotelės, QR kodai, nemokama pramoga šeimoms.">
+<meta property="og:image" content="https://sirvintoskeliauja.lt/assets/icons/herbas.png">
+<meta property="og:locale" content="lt_LT">
+<meta property="og:site_name" content="Širvintos keliauja">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TouristTrip",
+  "name": "Širvintų miesto maršrutas",
+  "description": "Interaktyvus 6 stotelių QR maršrutas po Širvintų miestą. Skulptūra Širvinta, Briedžių takas, Jaunimo sodas, centrinė aikštė.",
+  "url": "https://sirvintoskeliauja.lt/sirvintos/",
+  "inLanguage": "lt",
+  "isAccessibleForFree": true,
+  "itinerary": {
+    "@type": "ItemList",
+    "numberOfItems": 6,
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Poilsio zona prie Širvintų tvenkinio"},
+      {"@type": "ListItem", "position": 2, "name": "Jaunimo sodas"},
+      {"@type": "ListItem", "position": 3, "name": "Briedžių takas"},
+      {"@type": "ListItem", "position": 4, "name": "Wake parkas ir paplūdimys"},
+      {"@type": "ListItem", "position": 5, "name": "Tiltas per Širvintos upę"},
+      {"@type": "ListItem", "position": 6, "name": "Centrinė aikštė"}
+    ]
+  },
+  "provider": { "@type": "Organization", "name": "Širvintos keliauja", "url": "https://sirvintoskeliauja.lt" }
+}
+</script>
+
 <meta name="theme-color" content="#1a2e1a">
-<meta name="description" content="Interaktyvus Širvintų miesto maršrutas – 6 stotelės, QR kodai, švietėjiška informacija.">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
@@ -397,7 +434,6 @@ function openStop(i) {
 function checkCode() {
   const inp = document.getElementById('code-input');
   const val = inp.value.trim().toUpperCase();
-  // Sanitize
   if (!/^[A-Z0-9]{1,8}$/.test(val)) { inp.className = 'code-input err'; setTimeout(() => { inp.className = 'code-input'; inp.value = ''; }, 1400); return; }
   if (val === STOPS[currentStop].code) {
     inp.className = 'code-input ok';
@@ -410,8 +446,8 @@ function checkCode() {
         if (typeof gtag === 'function') {
           gtag('event', 'zaidimas_baigtas', { 'event_category': 'zaidimas', 'event_label': 'Širvintos' });
         }
-        showPrize(); }
-      else {
+        showPrize();
+      } else {
         document.getElementById('code-section').style.display = 'none';
         const cs = document.getElementById('collected-section');
         cs.style.display = 'flex';
@@ -426,10 +462,7 @@ function checkCode() {
   }
 }
 
-function showPrize() {
-  generateConfetti();
-  showScreen('prize');
-}
+function showPrize() { generateConfetti(); showScreen('prize'); }
 
 function generateConfetti() {
   const wrap = document.getElementById('confetti-wrap');
@@ -460,10 +493,8 @@ function initMap() {
   const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
 
   osm.addTo(map);
-
   L.control.attribution({ prefix: '© <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>' }).addTo(map);
 
-  // Sluoksnių perjungimo mygtukas
   let isSatellite = false;
   const layerBtn = L.control({ position: 'topright' });
   layerBtn.onAdd = function() {
@@ -490,9 +521,7 @@ function makeIcon(label, isDone) {
   return L.divIcon({
     className: '',
     html: `<div style="width:34px;height:34px;border-radius:50%;background:${isDone ? '#d4872a' : '#2d4a2d'};border:2px solid ${isDone ? '#f0b840' : '#8fb88f'};display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:${isDone ? '#1a2e1a' : '#f5f0e8'};box-shadow:0 2px 6px rgba(0,0,0,0.4);">${label}</div>`,
-    iconSize: [34, 34],
-    iconAnchor: [17, 17],
-    popupAnchor: [0, -20]
+    iconSize: [34, 34], iconAnchor: [17, 17], popupAnchor: [0, -20]
   });
 }
 
@@ -522,9 +551,7 @@ function centerOnUser(show = true) {
     const { latitude: lat, longitude: lng } = pos.coords;
     if (map) {
       if (userMarker) map.removeLayer(userMarker);
-      userMarker = L.circleMarker([lat, lng], {
-        radius: 8, fillColor: '#2d7cf6', fillOpacity: 1, color: '#fff', weight: 2
-      }).addTo(map).bindPopup('Jūsų vieta');
+      userMarker = L.circleMarker([lat, lng], { radius: 8, fillColor: '#2d7cf6', fillOpacity: 1, color: '#fff', weight: 2 }).addTo(map).bindPopup('Jūsų vieta');
       map.setView([lat, lng], 15);
     }
     if (show) toast('Lokacija atnaujinta.');

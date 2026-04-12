@@ -10,9 +10,50 @@
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kernavė · Širvintos keliauja</title>
+
+<!-- ══ SEO ══ -->
+<title>Kernavė maršrutas – piliakalniai, UNESCO paveldas ir QR žaidimas · Širvintos keliauja</title>
+<meta name="description" content="Leiskitės į interaktyvią kelionę po Kernavę! Piliakalniai, muziejus, Aukuro kalnas, senovės gyvenvietė – 5 stotelės, QR kodai, UNESCO pasaulio paveldas. Nemokama.">
+<meta name="keywords" content="Kernavė lankytinos vietos, Kernavės piliakalniai, Kernavė UNESCO, ką veikti Kernavėje, Kernavės muziejus, Aukuro kalnas, pirmoji Lietuvos sostinė">
+<meta name="author" content="Juras Stasiūnas">
+<link rel="canonical" href="https://sirvintoskeliauja.lt/kernave/">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://sirvintoskeliauja.lt/kernave/">
+<meta property="og:title" content="Kernavė maršrutas – piliakalniai ir UNESCO paveldas QR žaidime">
+<meta property="og:description" content="Interaktyvi kelionė laiku po Kernavę! Piliakalniai, muziejus, Aukuro kalnas, senovės gyvenvietė – 5 stotelės, QR kodai, nemokama pramoga.">
+<meta property="og:image" content="https://sirvintoskeliauja.lt/assets/icons/herbas.png">
+<meta property="og:locale" content="lt_LT">
+<meta property="og:site_name" content="Širvintos keliauja">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "TouristTrip",
+  "name": "Kernavės maršrutas",
+  "description": "Interaktyvus 5 stotelių QR maršrutas po Kernavę – UNESCO pasaulio paveldo vietovę.",
+  "url": "https://sirvintoskeliauja.lt/kernave/",
+  "inLanguage": "lt",
+  "isAccessibleForFree": true,
+  "itinerary": {
+    "@type": "ItemList",
+    "numberOfItems": 5,
+    "itemListElement": [
+      {"@type": "ListItem", "position": 1, "name": "Kernavės archeologinės vietovės muziejus"},
+      {"@type": "ListItem", "position": 2, "name": "Kernavės bažnyčia"},
+      {"@type": "ListItem", "position": 3, "name": "Aukuro kalnas"},
+      {"@type": "ListItem", "position": 4, "name": "Baltojo Kalno aikštelė"},
+      {"@type": "ListItem", "position": 5, "name": "Senovės gyvenvietė"}
+    ]
+  },
+  "subjectOf": {
+    "@type": "LandmarksOrHistoricalBuildings",
+    "name": "Kernavės archeologinė vietovė",
+    "description": "UNESCO Pasaulio paveldo sąrašo objektas nuo 2004 m."
+  },
+  "provider": { "@type": "Organization", "name": "Širvintos keliauja", "url": "https://sirvintoskeliauja.lt" }
+}
+</script>
+
 <meta name="theme-color" content="#1a2e1a">
-<meta name="description" content="Interaktyvus Kernavės maršrutas – 5 stotelės, QR kodai, švietėjiška informacija.">
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
@@ -42,8 +83,8 @@ button, input { font: inherit; }
 /* ── PROGRESS ── */
 .progress-bar-wrap { height: 4px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
 .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--amber), var(--gold)); transition: width 0.5s ease; }
-
 .progress-label { text-align: center; font-size: 0.75rem; color: var(--sage); padding: 0.4rem; background: rgba(0,0,0,0.1); }
+
 /* ── MAP ── */
 .map-area { flex-shrink: 0; height: 220px; background: linear-gradient(160deg, #1a2e1a, #243824); position: relative; }
 #real-map { width: 100%; height: 100%; }
@@ -105,16 +146,6 @@ button, input { font: inherit; }
 .btn-next { display: block; width: 100%; padding: 0.85rem; background: linear-gradient(135deg, var(--amber), var(--gold)); border: none; border-radius: 14px; color: var(--forest); font-weight: 700; font-size: 0.95rem; cursor: pointer; text-align: center; }
 .btn-next:hover { opacity: 0.9; }
 
-/* ── PRIZE ── */
-#screen-prize { justify-content: center; align-items: center; text-align: center; padding: 2rem; }
-.prize-icon { font-size: 4rem; margin-bottom: 1rem; animation: float 3s ease-in-out infinite; }
-@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);} }
-.prize-title { font-family: 'Playfair Display', serif; font-size: 2rem; margin-bottom: 0.5rem; color: var(--gold); }
-.prize-sub { font-size: 0.9rem; color: rgba(245,240,232,0.7); line-height: 1.6; margin-bottom: 2rem; }
-.prize-card { background: rgba(240,184,64,0.1); border: 1px solid rgba(240,184,64,0.3); border-radius: 16px; padding: 1.5rem; margin-bottom: 1.5rem; max-width: 320px; }
-.prize-code { font-size: 1.3rem; letter-spacing: 0.15em; font-weight: 700; color: var(--gold); }
-.prize-code-label { font-size: 0.75rem; color: rgba(245,240,232,0.5); margin-top: 4px; }
-
 /* ── QR SHEET ── */
 .qr-sheet { position: fixed; inset: 0; z-index: 50; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.6); }
 .qr-sheet.open { display: flex; }
@@ -143,8 +174,8 @@ button, input { font: inherit; }
     <span class="topbar-icon">🏰</span>
   </div>
   <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-
   <div class="progress-label" id="progress-label">0 iš 5 stotelių surinkta · rink bet kokia tvarka</div>
+
   <div class="map-area">
     <div id="real-map"></div>
     <div class="map-overlay">
@@ -395,8 +426,8 @@ function checkCode() {
         if (typeof gtag === 'function') {
           gtag('event', 'zaidimas_baigtas', { 'event_category': 'zaidimas', 'event_label': 'Kernavė' });
         }
-        showPrize(); }
-      else {
+        showPrize();
+      } else {
         document.getElementById('code-section').style.display = 'none';
         const cs = document.getElementById('collected-section');
         cs.classList.remove('hidden');
@@ -425,8 +456,6 @@ function generateConfetti() {
     wrap.appendChild(p);
   }
 }
-
-
 
 function shareResult() {
   if (navigator.share) {
@@ -526,7 +555,6 @@ async function openQr() {
       () => {}
     );
   } catch(e) {
-    console.error('QR error:', e);
     const msg = e.toString().toLowerCase().includes('permission')
       ? '📷 Leisk kamerą naršyklės nustatymuose ir bandyk dar kartą.'
       : 'Nepavyko paleisti kameros. Įvesk kodą ranka.';
@@ -547,9 +575,6 @@ function toast(msg) {
   t.textContent = msg; t.classList.add('show');
   clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2800);
 }
-
-function hidden(el) { document.getElementById(el).classList.add('hidden'); }
-Element.prototype.hidden = false;
 
 document.addEventListener('DOMContentLoaded', () => {
   load(); updateUI();
