@@ -167,6 +167,7 @@ button, input { font: inherit; }
 /* ── TOAST ── */
 .toast { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%) translateY(140%); z-index: 100; background: rgba(10,20,10,0.92); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 0.8rem 1.1rem; font-size: 0.88rem; max-width: calc(100% - 24px); width: 400px; transition: transform 0.25s ease; }
 .toast.show { transform: translateX(-50%) translateY(0); }
+.hidden { display: none !important; }
 </style>
 </head>
 <body>
@@ -240,10 +241,10 @@ button, input { font: inherit; }
         <button class="btn-confirm" onclick="checkCode()">✓</button>
       </div>
       <button class="btn-qr" onclick="openQr()">📷 Skenuoti QR kodą</button>
-      <div class="nav-btns">
-        <button class="btn-nav-prev" id="btn-prev" onclick="navigateStop(-1)">← Ankstesnė</button>
-        <button class="btn-nav-next" id="btn-next-stop" onclick="navigateStop(1)">Kita →</button>
-      </div>
+    </div>
+    <div class="nav-btns" id="nav-btns-section">
+      <button class="btn-nav-prev" id="btn-prev" onclick="navigateStop(-1)">← Ankstesnė</button>
+      <button class="btn-nav-next" id="btn-next-stop" onclick="navigateStop(1)">Kita →</button>
     </div>
     <div id="collected-section" class="hidden" style="flex-direction:column;gap:8px;">
       <div class="collected-box" style="margin-bottom:0.8rem">
@@ -369,6 +370,7 @@ function resetAndStart() {
   collected = new Array(STOPS.length).fill(false);
   localStorage.removeItem(KEY);
   showScreen('map');
+  renderMarkers();
 }
 
 function updateUI() {
@@ -462,14 +464,10 @@ function navigateStop(dir) {
 function updateNavBtns() {
   const isFirst = currentStop === 0;
   const isLast = currentStop === STOPS.length - 1;
-  ['btn-prev'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.disabled = isFirst;
-  });
-  ['btn-next-stop'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.disabled = isLast;
-  });
+  const prev = document.getElementById('btn-prev');
+  const next = document.getElementById('btn-next-stop');
+  if (prev) prev.disabled = isFirst;
+  if (next) next.disabled = isLast;
 }
 
 function showPrize() { generateConfetti(); showScreen('prize'); }
@@ -535,7 +533,6 @@ function initMap() {
 
   renderMarkers();
   fitAll();
-  centerOnUser();
 }
 
 function makeIcon(label, isDone) {
@@ -570,8 +567,8 @@ async function openQr() {
   if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
     toast('⚠️ Kamera veikia tik per HTTPS. Įvesk kodą ranka.'); return;
   }
-  document.getElementById('qr-sheet').classList.add('open');
   if (typeof Html5Qrcode === 'undefined') { toast('QR biblioteka neužsikrovė. Atnaujink puslapį.'); return; }
+  document.getElementById('qr-sheet').classList.add('open');
   try {
     if (qrScanner) { try { await qrScanner.stop(); } catch(e) {} try { await qrScanner.clear(); } catch(e) {} qrScanner = null; }
     qrScanner = new Html5Qrcode('qr-reader');
