@@ -86,7 +86,7 @@ button, input { font: inherit; }
 .progress-label { text-align: center; font-size: 0.75rem; color: var(--sage); padding: 0.4rem; background: rgba(0,0,0,0.1); }
 
 /* ── MAP ── */
-.map-area { flex-shrink: 0; height: 220px; background: linear-gradient(160deg, #1a2e1a, #243824); position: relative; overflow: hidden; }
+.map-area { flex-shrink: 0; height: clamp(250px, 35vh, 360px); height: clamp(250px, 35dvh, 360px); background: linear-gradient(160deg, #1a2e1a, #243824); position: relative; overflow: hidden; }
 #real-map { width: 100%; height: 100%; }
 .map-overlay { position: absolute; left: 10px; right: 10px; bottom: 10px; background: rgba(10,20,10,0.82); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.6rem 0.8rem; backdrop-filter: blur(6px); z-index: 400; pointer-events: none; }
 .map-overlay-title { font-size: 0.78rem; font-weight: 500; color: var(--gold); }
@@ -145,6 +145,14 @@ button, input { font: inherit; }
 .collected-sub { font-size: 0.8rem; color: rgba(143,184,143,0.7); margin-top: 4px; }
 .btn-next { display: block; width: 100%; padding: 0.85rem; background: linear-gradient(135deg, var(--amber), var(--gold)); border: none; border-radius: 14px; color: var(--forest); font-weight: 700; font-size: 0.95rem; cursor: pointer; text-align: center; }
 .btn-next:hover { opacity: 0.9; }
+
+
+/* ── NAV BTNS ── */
+.nav-btns { display: flex; gap: 8px; margin-top: 4px; }
+.btn-nav-prev { flex: 1; padding: 0.65rem; font-size: 0.83rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: rgba(245,240,232,0.6); cursor: pointer; }
+.btn-nav-prev:disabled { opacity: 0.25; cursor: default; }
+.btn-nav-next { flex: 1; padding: 0.65rem; font-size: 0.83rem; background: linear-gradient(135deg, var(--amber), var(--gold)); border: none; border-radius: 12px; color: var(--forest); font-weight: 700; cursor: pointer; }
+.btn-nav-next:disabled { opacity: 0.25; cursor: default; background: rgba(255,255,255,0.05); color: rgba(245,240,232,0.4); border: 1px solid rgba(255,255,255,0.08); }
 
 /* ── QR SHEET ── */
 .qr-sheet { position: fixed; inset: 0; z-index: 50; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.6); }
@@ -221,25 +229,30 @@ button, input { font: inherit; }
       <div class="info-block-label">💡 Įdomus faktas</div>
       <div class="info-block-text" id="stop-fact">...</div>
     </div>
-    <div class="action-row">
-      <button class="btn-action" id="nav-btn">📍 Vykstu ten</button>
-      <button class="btn-action" onclick="openQr()">📷 Skenuoti QR</button>
-    </div>
+    <button class="btn-action" id="nav-btn" style="width:100%">📍 Vykstu ten</button>
     <div class="task-block">
       <div class="info-block-label">🎯 Užduotis</div>
       <div class="info-block-text" id="stop-task">...</div>
     </div>
     <div id="code-section" class="code-wrap">
       <div class="code-row">
-        <input class="code-input" id="code-input" type="text" maxlength="8" placeholder="KODAS" oninput="this.value=this.value.toUpperCase()">
+        <input class="code-input" id="code-input" type="text" maxlength="8" placeholder="Negali nuskaityti QR? Įvesk kodą" oninput="this.value=this.value.toUpperCase()">
         <button class="btn-confirm" onclick="checkCode()">✓</button>
       </div>
       <button class="btn-qr" onclick="openQr()">📷 Skenuoti QR kodą</button>
+      <div class="nav-btns">
+        <button class="btn-nav-prev" id="btn-prev" onclick="navigateStop(-1)">← Ankstesnė</button>
+        <button class="btn-nav-next" id="btn-next-stop" onclick="navigateStop(1)">Kita →</button>
+      </div>
     </div>
     <div id="collected-section" class="hidden" style="flex-direction:column;gap:8px;">
       <div class="collected-box" style="margin-bottom:0.8rem">
         <div class="collected-title">✅ Stotelė surinkta!</div>
         <div class="collected-sub" id="collected-sub">Tęsk maršrutą</div>
+      </div>
+      <div class="nav-btns">
+        <button class="btn-nav-prev" id="btn-prev-done" onclick="navigateStop(-1)">← Ankstesnė</button>
+        <button class="btn-nav-next" id="btn-next-done" onclick="navigateStop(1)">Kita →</button>
       </div>
       <button class="btn-next" onclick="showScreen('map')">← Grįžti į žemėlapį</button>
     </div>
@@ -409,6 +422,7 @@ function openStop(i) {
   const inp = document.getElementById('code-input');
   inp.value = ''; inp.className = 'code-input';
   showScreen('stop');
+  updateNavBtns();
 }
 
 function checkCode() {
@@ -440,6 +454,26 @@ function checkCode() {
     inp.className = 'code-input err';
     setTimeout(() => { inp.className = 'code-input'; inp.value = ''; }, 1400);
   }
+}
+
+
+function navigateStop(dir) {
+  const next = currentStop + dir;
+  if (next < 0 || next >= STOPS.length) return;
+  openStop(next);
+}
+
+function updateNavBtns() {
+  const isFirst = currentStop === 0;
+  const isLast = currentStop === STOPS.length - 1;
+  ['btn-prev', 'btn-prev-done'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = isFirst;
+  });
+  ['btn-next-stop', 'btn-next-done'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = isLast;
+  });
 }
 
 function showPrize() { generateConfetti(); showScreen('prize'); }
