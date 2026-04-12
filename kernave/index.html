@@ -131,7 +131,7 @@ button, input { font: inherit; }
 /* QR / code */
 .code-wrap { display: flex; flex-direction: column; gap: 8px; }
 .code-row { display: flex; gap: 8px; }
-.code-input { flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(143,184,143,0.25); border-radius: 12px; color: var(--cream); font-size: 1rem; letter-spacing: 0.18em; text-align: center; text-transform: uppercase; outline: none; transition: border-color 0.2s; }
+.code-input { flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(143,184,143,0.25); border-radius: 12px; color: var(--cream); font-size: 0.88rem; letter-spacing: 0.03em; text-align: center; outline: none; transition: border-color 0.2s; }
 .code-input:focus { border-color: var(--gold); }
 .code-input.ok { border-color: #4caf50; background: rgba(76,175,80,0.1); }
 .code-input.err { border-color: #f44336; background: rgba(244,67,54,0.1); animation: shake 0.3s; }
@@ -249,10 +249,6 @@ button, input { font: inherit; }
       <div class="collected-box" style="margin-bottom:0.8rem">
         <div class="collected-title">✅ Stotelė surinkta!</div>
         <div class="collected-sub" id="collected-sub">Tęsk maršrutą</div>
-      </div>
-      <div class="nav-btns">
-        <button class="btn-nav-prev" id="btn-prev-done" onclick="navigateStop(-1)">← Ankstesnė</button>
-        <button class="btn-nav-next" id="btn-next-done" onclick="navigateStop(1)">Kita →</button>
       </div>
       <button class="btn-next" onclick="showScreen('map')">← Grįžti į žemėlapį</button>
     </div>
@@ -466,11 +462,11 @@ function navigateStop(dir) {
 function updateNavBtns() {
   const isFirst = currentStop === 0;
   const isLast = currentStop === STOPS.length - 1;
-  ['btn-prev', 'btn-prev-done'].forEach(id => {
+  ['btn-prev'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = isFirst;
   });
-  ['btn-next-stop', 'btn-next-done'].forEach(id => {
+  ['btn-next-stop'].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.disabled = isLast;
   });
