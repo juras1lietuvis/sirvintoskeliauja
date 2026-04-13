@@ -88,9 +88,7 @@ button, input { font: inherit; }
 /* ── MAP ── */
 .map-area { flex-shrink: 0; height: clamp(250px, 35vh, 360px); height: clamp(250px, 35dvh, 360px); background: linear-gradient(160deg, #1a2e1a, #243824); position: relative; overflow: hidden; }
 #real-map { width: 100%; height: 100%; }
-.map-overlay { position: absolute; left: 10px; right: 10px; bottom: 10px; background: rgba(10,20,10,0.82); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.6rem 0.8rem; backdrop-filter: blur(6px); z-index: 400; pointer-events: none; }
-.map-overlay-title { font-size: 0.78rem; font-weight: 500; color: var(--gold); }
-.map-overlay-text { font-size: 0.75rem; color: rgba(245,240,232,0.7); margin-top: 2px; }
+.map-pill { position: absolute; left: 10px; bottom: 10px; background: rgba(10,20,10,0.88); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 4px 12px; font-size: 0.82rem; font-weight: 500; color: var(--gold); z-index: 400; pointer-events: none; }
 .map-actions { display: flex; gap: 6px; padding: 0.6rem 1rem; background: var(--moss); border-bottom: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; }
 .btn-sm { padding: 0.45rem 0.8rem; font-size: 0.8rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--cream); cursor: pointer; }
 .btn-sm:hover { background: rgba(255,255,255,0.12); }
@@ -187,10 +185,7 @@ button, input { font: inherit; }
 
   <div class="map-area">
     <div id="real-map"></div>
-    <div class="map-overlay">
-      <div class="map-overlay-title" id="map-overlay-title">Interaktyvus žemėlapis</div>
-      <div class="map-overlay-text" id="map-overlay-text">Paspausk stotelę sąraše arba žemėlapyje</div>
-    </div>
+    <div class="map-pill" id="map-pill">👣 0/5</div>
   </div>
 
   <div class="map-actions">
@@ -331,10 +326,10 @@ const STOPS = [
   {
     name: 'Senovės gyvenvietė', icon: '🏘', code: 'K005',
     lat: 54.884167, lng: 24.847556,
-    hint: 'Rekonstruota trobelė · FINALAS 🏆',
+    hint: 'Rekonstruota trobelė',
     desc: 'Rekonstruotas XIII–XIV a. viduramžių miesto fragmentas – gatvė ir amatininkų kiemai. Čia gyveno juvelyrai, kalviai, puodžiai – klestintis miestas paskutinėje Europos pagoniškoje sostinėje.',
     fact: 'Kernavė vadinama "Lietuvos Troja" – miesto liekanos išsaugotos po durpių sluoksniu, todėl išlikę net mediniai dirbiniai.',
-    task: 'PASKUTINIS BRIEDIS! Rekonstruotos gyvenvietės pirmosios trobelės sienos kampe rasi medinį briedžiuką su QR kodu.'
+    task: 'Rekonstruotos gyvenvietės pirmosios trobelės sienos kampe rasi medinį briedžiuką su QR kodu.'
   }
 ];
 
@@ -394,12 +389,10 @@ function updateUI() {
   }).join('');
   if (done === STOPS.length) {
     document.getElementById('progress-label').textContent = '🏆 Visos stotelės surinktos!';
-    document.getElementById('map-overlay-title').textContent = 'Maršrutas įveiktas! 🏆';
-    document.getElementById('map-overlay-text').textContent = 'Visos Kernavės stotelės surinktos!';
+    document.getElementById('map-pill').textContent = '👣 5/5';
   } else {
-    document.getElementById('progress-label').textContent = `${done} iš ${STOPS.length} stotelių surinkta · rink bet kokia tvarka`;
-    document.getElementById('map-overlay-title').textContent = `${done} / ${STOPS.length} stotelių surinkta`;
-    document.getElementById('map-overlay-text').textContent = 'Visos stotelės atviros – rink bet kokia tvarka!';
+    document.getElementById('progress-label').textContent = `${done} iš ${STOPS.length} stotelių surinkta • Keliauk laisva seka`;
+    document.getElementById('map-pill').textContent = `👣 ${done}/${STOPS.length}`;
   }
 }
 
