@@ -12,15 +12,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- ══ SEO ══ -->
-<title>Kernavė maršrutas – piliakalniai, UNESCO paveldas ir QR žaidimas · Širvintos keliauja</title>
-<meta name="description" content="Leiskitės į interaktyvią kelionę po Kernavę! Piliakalniai, muziejus, Aukuro kalnas, senovės gyvenvietė – 5 stotelės, QR kodai, UNESCO pasaulio paveldas. Nemokama.">
+<title>Kernavė maršrutas – 13 stotelių, piliakalniai, UNESCO paveldas · Širvintos keliauja</title>
+<meta name="description" content="Interaktyvus 13 stotelių QR maršrutas po Kernavę – piliakalniai, muziejus, medgrinda, kapinynas ir UNESCO paveldas. Nemokama.">
 <meta name="keywords" content="Kernavė lankytinos vietos, Kernavės piliakalniai, Kernavė UNESCO, ką veikti Kernavėje, Kernavės muziejus, Aukuro kalnas, pirmoji Lietuvos sostinė">
 <meta name="author" content="Juras Stasiūnas">
 <link rel="canonical" href="https://sirvintoskeliauja.lt/kernave/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sirvintoskeliauja.lt/kernave/">
 <meta property="og:title" content="Kernavė maršrutas – piliakalniai ir UNESCO paveldas QR žaidime">
-<meta property="og:description" content="Interaktyvi kelionė laiku po Kernavę! Piliakalniai, muziejus, Aukuro kalnas, senovės gyvenvietė – 5 stotelės, QR kodai, nemokama pramoga.">
+<meta property="og:description" content="Interaktyvi kelionė laiku po Kernavę! Piliakalniai, muziejus, Aukuro kalnas, 13 stotelių, piliakalniai, muziejus – QR kodai, nemokama pramoga.">
 <meta property="og:image" content="https://sirvintoskeliauja.lt/assets/icons/herbas.png">
 <meta property="og:locale" content="lt_LT">
 <meta property="og:site_name" content="Širvintos keliauja">
@@ -29,19 +29,27 @@
   "@context": "https://schema.org",
   "@type": "TouristTrip",
   "name": "Kernavės maršrutas",
-  "description": "Interaktyvus 5 stotelių QR maršrutas po Kernavę – UNESCO pasaulio paveldo vietovę.",
+  "description": "Interaktyvus 13 stotelių QR maršrutas po Kernavę – UNESCO pasaulio paveldo vietovę.",
   "url": "https://sirvintoskeliauja.lt/kernave/",
   "inLanguage": "lt",
   "isAccessibleForFree": true,
   "itinerary": {
     "@type": "ItemList",
-    "numberOfItems": 5,
+    "numberOfItems": 13,
     "itemListElement": [
-      {"@type": "ListItem", "position": 1, "name": "Kernavės archeologinės vietovės muziejus"},
+      {"@type": "ListItem", "position": 1, "name": "Kernavės muziejus"},
       {"@type": "ListItem", "position": 2, "name": "Kernavės bažnyčia"},
-      {"@type": "ListItem", "position": 3, "name": "Aukuro kalnas"},
-      {"@type": "ListItem", "position": 4, "name": "Baltojo Kalno aikštelė"},
-      {"@type": "ListItem", "position": 5, "name": "Senovės gyvenvietė"}
+      {"@type": "ListItem", "position": 3, "name": "Kernavės medinė koplytėlė"},
+      {"@type": "ListItem", "position": 4, "name": "Piliakalnių apžvalgos aikštelė"},
+      {"@type": "ListItem", "position": 5, "name": "Pilies kalno piliakalnis"},
+      {"@type": "ListItem", "position": 6, "name": "Mindaugo Sosto piliakalnis"},
+      {"@type": "ListItem", "position": 7, "name": "Aukuro piliakalnis"},
+      {"@type": "ListItem", "position": 8, "name": "Lizdeikos kalno piliakalnis"},
+      {"@type": "ListItem", "position": 9, "name": "Kriveikiškio piliakalnis"},
+      {"@type": "ListItem", "position": 10, "name": "Medgrinda"},
+      {"@type": "ListItem", "position": 11, "name": "Seniausias kapinynas"},
+      {"@type": "ListItem", "position": 12, "name": "Balto kalno apžvalgos aikštelė"},
+      {"@type": "ListItem", "position": 13, "name": "Muziejus po atviru dangumi"}
     ]
   },
   "subjectOf": {
@@ -113,7 +121,7 @@ button, input { font: inherit; }
 #screen-stop { flex-direction: column; }
 .stop-hero { flex-shrink: 0; height: 150px; background: linear-gradient(135deg, var(--moss), #1a3a1a); display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; }
 .stop-hero-badge { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; background: rgba(240,184,64,0.15); border: 1px solid rgba(240,184,64,0.3); color: var(--gold); padding: 3px 9px; border-radius: 20px; }
-.stop-body { flex: 1; overflow-y: auto; padding: 1.2rem 1rem; display: flex; flex-direction: column; gap: 0.9rem; }
+.stop-body { flex: 1; overflow-y: auto; padding: 1.2rem 1rem calc(2rem + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 0.9rem; }
 .info-block { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 0.9rem 1rem; }
 .info-block-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage); margin-bottom: 0.4rem; }
 .info-block-text { font-size: 0.88rem; line-height: 1.65; color: rgba(245,240,232,0.88); }
@@ -166,6 +174,7 @@ button, input { font: inherit; }
 .toast { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%) translateY(140%); z-index: 100; background: rgba(10,20,10,0.92); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 0.8rem 1.1rem; font-size: 0.88rem; max-width: calc(100% - 24px); width: 400px; transition: transform 0.25s ease; }
 .toast.show { transform: translateX(-50%) translateY(0); }
 .hidden { display: none !important; }
+#collected-section { display: flex; flex-direction: column; gap: 8px; }
 </style>
 </head>
 <body>
@@ -181,11 +190,11 @@ button, input { font: inherit; }
     <span class="topbar-icon">🏰</span>
   </div>
   <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-  <div class="progress-label" id="progress-label">0 iš 5 stotelių surinkta ·keliauk laisva seka</div>
+  <div class="progress-label" id="progress-label">0 iš 13 stotelių surinkta • Keliauk laisva seka</div>
 
   <div class="map-area">
     <div id="real-map"></div>
-    <div class="map-pill" id="map-pill">👣 0/5</div>
+    <div class="map-pill" id="map-pill">👣 0/13</div>
   </div>
 
   <div class="map-actions">
@@ -195,7 +204,7 @@ button, input { font: inherit; }
   </div>
 
   <div class="stops-list">
-    <div class="region-label">📍 Kernavė · 5 stotelės ·keliauk laisva seka</div>
+    <div class="region-label">📍 Kernavė · 13 stotelių · keliauk laisva seka</div>
     <div id="stops-list-inner"></div>
   </div>
 </div>
@@ -205,7 +214,7 @@ button, input { font: inherit; }
   <div class="topbar">
     <button class="back-btn" onclick="showScreen('map')">← Kernavė</button>
     <div class="topbar-info">
-      <div class="topbar-eyebrow" id="stop-eyebrow">Stotelė 1 iš 5</div>
+      <div class="topbar-eyebrow" id="stop-eyebrow">Stotelė 1 iš 13</div>
       <div class="topbar-title" id="stop-title">Kernavės muziejus</div>
     </div>
     <span class="topbar-icon" id="stop-icon">🏛</span>
@@ -213,7 +222,7 @@ button, input { font: inherit; }
 
   <div class="stop-hero" id="stop-hero">
     <span id="stop-hero-icon">🏛</span>
-    <div class="stop-hero-badge" id="stop-hero-badge">Kernavė · 1/5</div>
+    <div class="stop-hero-badge" id="stop-hero-badge">Kernavė · 1/13</div>
   </div>
 
   <div class="stop-body">
@@ -241,7 +250,7 @@ button, input { font: inherit; }
       <button class="btn-nav-prev" id="btn-prev" onclick="navigateStop(-1)">← Ankstesnė</button>
       <button class="btn-nav-next" id="btn-next-stop" onclick="navigateStop(1)">Kita →</button>
     </div>
-    <div id="collected-section" class="hidden" style="flex-direction:column;gap:8px;">
+    <div id="collected-section" class="hidden">
       <div class="collected-box" style="margin-bottom:0.8rem">
         <div class="collected-title">✅ Stotelė surinkta!</div>
         <div class="collected-sub" id="collected-sub">Tęsk maršrutą</div>
@@ -261,10 +270,10 @@ button, input { font: inherit; }
     @keyframes pfloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
   </style>
   <div style="position:relative;z-index:2;max-width:340px;">
-    <div style="font-size:5rem;margin-bottom:0.5rem;" class="prize-float">🔥</div>
+    <div style="font-size:5rem;margin-bottom:0.5rem;" class="prize-float">🏆</div>
     <h2 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#f0b840;margin-bottom:0.4rem;">Sveikiname!</h2>
-    <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:#8fb88f;margin-bottom:1rem;">„Kernavės Ugniasaugis"</p>
-    <p style="font-size:0.92rem;color:rgba(245,240,232,0.75);line-height:1.7;margin-bottom:2rem;">Suradai visas 5 Kernavės stoteles ir pažinai seniausią Lietuvos sostinę!<br>Nuo muziejaus iki senovės gyvenvietės – tu perėjai visą Kernavės istoriją.</p>
+    <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:#8fb88f;margin-bottom:1rem;">„Kernavės žvalgytojas"</p>
+    <p style="font-size:0.92rem;color:rgba(245,240,232,0.75);line-height:1.7;margin-bottom:2rem;">Suradai visas 13 Kernavės stotelių – nuo muziejaus iki slaptų piliakalnių!<br>Tu esi tikras Kernavės žvalgytojas.</p>
     <div style="display:flex;gap:8px;justify-content:center;margin-bottom:1.5rem;">
       <button style="padding:0.65rem 1.2rem;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#f5f0e8;font-size:0.85rem;cursor:pointer;" onclick="shareResult()">📤 Pasidalink</button>
       <button style="padding:0.65rem 1.2rem;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#f5f0e8;font-size:0.85rem;cursor:pointer;" onclick="showScreen('map')">🗺 Grįžti</button>
@@ -293,43 +302,107 @@ button, input { font: inherit; }
 const STOPS = [
   {
     name: 'Kernavės muziejus', icon: '🏛', code: 'K001',
-    lat: 54.8856563, lng: 24.853976,
+    lat: 54.88567996381057, lng: 24.853971880873242,
     hint: 'UNESCO paveldas · prie įėjimo',
-    desc: 'Vienintelis specializuotas archeologijos muziejus Lietuvoje, įkurtas 1930 m. Trijose salėse eksponuojama per 20 tūkst. radinių – nuo akmens amžiaus iki XIII–XIV a. viduramžių Kernavės.',
-    fact: '2004 m. Kernavės archeologinė vietovė įtraukta į UNESCO Pasaulio paveldo sąrašą. Ištirta tik 1,5 proc. teritorijos!',
-    task: 'Prie muziejaus pagrindinio įėjimo rask informacinį stendą su briedžio ženklu ir nuskaityk QR kodą.'
+    desc: 'Modernus muziejus, nuo kurio prasideda pažintis su UNESCO saugoma vietove. Saugomi tūkstančiai autentiškų radinių nuo ledynmečio pabaigos iki viduramžių.',
+    fact: 'Muziejuje galima pamatyti ne tik įrankius ar papuošalus, bet ir autentiškas viduramžių meistrų pėdsakų detales.',
+    task: 'Prie pagrindinio įėjimo surask informacinį stendą arba koloną. QR kodas yra ant jos.'
   },
   {
     name: 'Kernavės bažnyčia', icon: '⛪', code: 'K002',
-    lat: 54.8847944, lng: 24.8519604,
-    hint: 'Šventoriuje · prie mozaikų',
-    desc: 'Neogotikinio stiliaus vienbokštė bažnyčia, pastatyta 1910–1920 m. amerikiečių lietuvių lėšomis. Šventoriuje puošnios mozaikos, o šalia stovi medinė koplyčia – liaudies architektūros pavyzdys.',
-    fact: 'Šalia bažnyčios stovi medinė koplyčia, manoma, kilusi iš XIII amžiaus Kernavelės dvaro.',
-    task: 'Bažnyčios šventoriuje, prie mozaikų kelio, rask mediniame stulpelyje įtvirtintą briedžio ženklą su kodu.'
+    lat: 54.884794, lng: 24.851960,
+    hint: 'Šventoriuje · prie paminklo',
+    desc: 'Trečioji Kernavės bažnyčia – raudonų plytų neogotikos paminklas. Šventorių puošia unikalios mozaikos iš lauko akmenų bei paminklai su girnapusėmis.',
+    fact: 'Šventoriuje palaidotas Kernavei nusipelnęs šviesuolis kunigas Nikodemas Švogžlys-Milžinas.',
+    task: 'Surask paminklą su riteriu ir kalaviju. QR kodą rasi ant galinės paminklo pusės, prie pagrindo.'
   },
   {
-    name: 'Aukuro kalnas', icon: '🏔', code: 'K003',
-    lat: 54.882040, lng: 24.851481,
+    name: 'Medinė koplytėlė', icon: '🛕', code: 'K003',
+    lat: 54.884317, lng: 24.852274,
+    hint: 'Šalia bažnyčios',
+    desc: 'XVIII a. pab. aštuoniakampė koplytėlė, kurią 1822 m. čia perkėlė klebonas P. Cibovičius. Vasarą joje eksponuojamos medinės skulptūros.',
+    fact: 'Kažkada ji stovėjo be stogo ir langų. Dabar čia galima įsigyti vienuolių dirbinių.',
+    task: 'Apeik koplytėlę aplink. QR kodas yra ant medinės sienos šalia informacinės lentelės.'
+  },
+  {
+    name: 'Piliakalnių apžvalgos aikštelė', icon: '🔭', code: 'K004',
+    lat: 54.884170, lng: 24.852402,
+    hint: 'Prie medinio turėklo',
+    desc: 'Geriausia vieta apžvelgti visą penkių piliakalnių gynybinį kompleksą. Piliakalniai buvo natūraliai suformuoti ledynų ir pritaikyti gynybai.',
+    fact: 'Tai vienintelė tokia vieta Baltijos regione, saugoma UNESCO. Slėnis vadinamas Lietuvos „Pompėja".',
+    task: 'Prieik prie medinio apžvalgos aikštelės turėklo. QR kodas priklijuotas ant turėklo vidinės pusės.'
+  },
+  {
+    name: 'Pilies kalno piliakalnis', icon: '🏯', code: 'K005',
+    lat: 54.883556, lng: 24.850688,
+    hint: 'Prie laiptų pradžios',
+    desc: '25–30 m aukščio kalnas su 150 m ilgio pylimais. Čia buvo įtvirtinta aukštutinio Kernavės miesto dalis.',
+    fact: '1985 m. čia rastas keturių sidabrinių lydinių (senovinių pinigų) lobis.',
+    task: 'Surask laiptų pradžią lipant į viršų. QR kodą rasi ant medinio stulpelio šalia tako.'
+  },
+  {
+    name: 'Mindaugo Sosto piliakalnis', icon: '👑', code: 'K006',
+    lat: 54.883139, lng: 24.852520,
+    hint: 'Piliakalnio papėdėje',
+    desc: 'Stačiašlaitis piliakalnis, ant kurio XIII–XIV a. stovėjo gynybinė pilis.',
+    fact: 'Kalnas stipriai kenčia nuo erozijos – šlaitai yra ne kartą slinkę, paskutinį kartą 2021 m. pavasarį.',
+    task: 'Surask informacinį rezervato stulpą piliakalnio papėdėje. QR kodas priklijuotas ant stulpo šono.'
+  },
+  {
+    name: 'Aukuro piliakalnis', icon: '🔥', code: 'K007',
+    lat: 54.882040, lng: 24.851480,
     hint: 'Prie laiptų apačios',
-    desc: 'Centrinis Kernavės piliakalnis, saugojęs kunigaikščio dvarą. Anot padavimų, čia degė vaidilučių prižiūrima amžinoji ugnis. Nuo viršūnės atsiveria nuostabi Neries slėnio panorama.',
-    fact: '1390 m. Kernavės pilį sudegino patys jos gynėjai, nelaukdami artėjančios Kryžiuočių ordino kariuomenės.',
-    task: 'Prie Aukuro kalno laiptų apačioje rask medinę lentą su briedžiu ir nuskaityk ant jos esantį QR kodą.'
+    desc: 'Centrinis piliakalnis, ant kurio XIII–XIV a. stovėjo medinė kunigaikščio pilis.',
+    fact: 'Čia rasti išskirtiniai radiniai: stiklo fragmentai iš Artimųjų Rytų ir lošimo kauliukas iš briedžio kaulo.',
+    task: 'Nusileisk prie laiptų, vedančių link šio kalno. QR kodas paslėptas po pirmąja laiptų pakopa.'
   },
   {
-    name: 'Baltojo Kalno aikštelė', icon: '🌅', code: 'K004',
-    lat: 54.886889, lng: 24.829861,
-    hint: 'Ant medinio turėklo',
-    desc: 'Nutolusi nuo miesto triukšmo, ši aikštelė siūlo vieną gražiausių Neries upės vaizdų visoje apylinkėje. Pažintinis takas veda per mišką – puiki vieta pailsėti.',
-    fact: 'Baltas kalnas savo spalvą gavo nuo kreidos ir kalcito nuosėdų, iš tolo matomas upės slėnyje.',
-    task: 'Apžvalgos aikštelėje, ant medinio turėklo, priklijuotas briedžio lipdukas su kodu.'
+    name: 'Lizdeikos kalno piliakalnis', icon: '🗡', code: 'K008',
+    lat: 54.881902, lng: 24.853094,
+    hint: 'Prie medinės rodyklės',
+    desc: 'Gynybinis piliakalnis su kūgio formos pylimu, saugojęs Aukuro kalno prieigas.',
+    fact: 'Nors aplinka suardyta ūkio darbų, čia vis tiek rasta senovinių židinių ir stulpaviečių liekanų.',
+    task: 'Surask medinę rodyklę šalia piliakalnio. QR kodas yra ant konstrukcijos galinės pusės.'
   },
   {
-    name: 'Senovės gyvenvietė', icon: '🏘', code: 'K005',
-    lat: 54.884167, lng: 24.847556,
-    hint: 'Rekonstruota trobelė',
-    desc: 'Rekonstruotas XIII–XIV a. viduramžių miesto fragmentas – gatvė ir amatininkų kiemai. Čia gyveno juvelyrai, kalviai, puodžiai – klestintis miestas paskutinėje Europos pagoniškoje sostinėje.',
-    fact: 'Kernavė vadinama "Lietuvos Troja" – miesto liekanos išsaugotos po durpių sluoksniu, todėl išlikę net mediniai dirbiniai.',
-    task: 'Rekonstruotos gyvenvietės pirmosios trobelės sienos kampe rasi medinį briedžiuką su QR kodu.'
+    name: 'Kriveikiškio piliakalnis', icon: '⛰', code: 'K009',
+    lat: 54.878222, lng: 24.858027,
+    hint: 'Prie suoliuko',
+    desc: 'Penktasis piliakalnis, naudotas žvalgybai ir gynybai. Manoma, kad galėjo turėti ir sakralinę paskirtį.',
+    fact: 'Archeologinių tyrimų metu čia rasti medinių įtvirtinimų likučiai bei keramika.',
+    task: 'Prie takelio, vedančio į kalną, surask suoliuką. QR kodas paslėptas ant suoliuko kojos.'
+  },
+  {
+    name: 'Medgrinda', icon: '🪵', code: 'K010',
+    lat: 54.882138, lng: 24.848618,
+    hint: 'Pajautos slėnyje',
+    desc: 'Slaptas III–V a. takas iš pušinių rąstų per pelkę. Tai buvo svarbi gynybinės sistemos dalis.',
+    fact: 'Medgrinda buvo 2,4 m pločio ir apie 100 m ilgio – slaptas kelias, žinomas tik saviems.',
+    task: 'Surask medinį stulpą su ženklu Pajautos slėnyje. QR kodas yra ant jo.'
+  },
+  {
+    name: 'Seniausias kapinynas', icon: '🪨', code: 'K011',
+    lat: 54.879169, lng: 24.848067,
+    hint: 'Prie didelio akmens',
+    desc: 'VIII–I a. pr. m. e. laidojimo vieta, pažymėta akmenimis. Vienintelis tyrinėtas Brūkšniuotosios keramikos kultūros kapinynas Lietuvoje.',
+    fact: 'Nors beveik visi mirusieji buvo deginami, rastas vienas nesudegintas kapas, kurio paslaptis neįminta.',
+    task: 'Surask didelį akmenį su informacine lentele. QR kodas yra ant lentelės laikiklio.'
+  },
+  {
+    name: 'Balto kalno apžvalgos aikštelė', icon: '🌅', code: 'K012',
+    lat: 54.886915, lng: 24.829995,
+    hint: 'Ant suoliuko atlošo',
+    desc: 'Nuo šio skardžio atsiveria įspūdinga Neries kilpa. Čia įrengta poilsio vieta su suoleliais.',
+    fact: 'Vieta apipinta mitais ir legendomis – ideali ramybės oazė toli nuo miesto šurmulio.',
+    task: 'Atsisėsk ant apžvalgos aikštelės suoliuko. QR kodas yra ant atlošo galinės pusės.'
+  },
+  {
+    name: 'Muziejus po atviru dangumi', icon: '🏘', code: 'K013',
+    lat: 54.88408654860784, lng: 24.84695942149726,
+    hint: 'Rekonstruotas viduramžių miestelis',
+    desc: '2016 m. atkurtas Kernavės XIII–XIV a. viduramžių miesto fragmentas. Galima užeiti į trijų amatininkų – kauladirbio, juvelyro ir kalvio – sodybas.',
+    fact: 'Rekonstrukcija paremta tikrais archeologiniais tyrimais – kiekviena detalė turi istorinį pagrindą.',
+    task: 'Prie vienos iš atkurtų trobelių surask medinę tvorą. QR kodas paslėptas ant jos vidinės pusės.'
   }
 ];
 
@@ -389,7 +462,7 @@ function updateUI() {
   }).join('');
   if (done === STOPS.length) {
     document.getElementById('progress-label').textContent = '🏆 Visos stotelės surinktos!';
-    document.getElementById('map-pill').textContent = '👣 5/5';
+    document.getElementById('map-pill').textContent = `👣 ${STOPS.length}/${STOPS.length}`;
   } else {
     document.getElementById('progress-label').textContent = `${done} iš ${STOPS.length} stotelių surinkta • Keliauk laisva seka`;
     document.getElementById('map-pill').textContent = `👣 ${done}/${STOPS.length}`;
@@ -414,8 +487,8 @@ function openStop(i) {
   const cs = document.getElementById('collected-section');
   cs.classList.toggle('hidden', !done);
   if (done) {
-    const remaining = collected.filter(Boolean).length;
-    document.getElementById('collected-sub').textContent = remaining === STOPS.length ? '🏆 Visos stotelės surinktos!' : `${remaining} iš ${STOPS.length} surinkta`;
+    const doneCount = collected.filter(Boolean).length;
+    document.getElementById('collected-sub').textContent = doneCount === STOPS.length ? '🏆 Visos stotelės surinktos!' : `${doneCount} iš ${STOPS.length} surinkta`;
   }
   const inp = document.getElementById('code-input');
   inp.value = ''; inp.className = 'code-input';
@@ -443,8 +516,8 @@ function checkCode() {
         document.getElementById('code-section').style.display = 'none';
         const cs = document.getElementById('collected-section');
         cs.classList.remove('hidden');
-        const remaining = collected.filter(Boolean).length;
-        document.getElementById('collected-sub').textContent = `${remaining} iš ${STOPS.length} surinkta – tęsk!`;
+        const doneCount = collected.filter(Boolean).length;
+        document.getElementById('collected-sub').textContent = `${doneCount} iš ${STOPS.length} surinkta – tęsk!`;
         updateUI();
       }
     }, 700);
@@ -487,7 +560,7 @@ function generateConfetti() {
 
 function shareResult() {
   if (navigator.share) {
-    navigator.share({ title: 'Širvintos keliauja', text: 'Suradau visas 5 Kernavės stoteles ir tapau „Kernavės Ugniasaugiu"! 🔥', url: location.href });
+    navigator.share({ title: 'Širvintos keliauja', text: 'Suradau visas 13 Kernavės stotelių ir tapau „Kernavės žvalgytojas"! 🏆', url: location.href });
   } else { toast('Nukopijuok nuorodą ir pasidalink!'); }
 }
 
