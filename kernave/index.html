@@ -76,8 +76,11 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var(--cream); min-height: 100vh; }
 button, input { font: inherit; }
-.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen { display: none; flex-direction: column; }
 .screen.active { display: flex; }
+#screen-map { height: 100dvh; height: 100vh; overflow: hidden; }
+.map-fixed { flex: 0 0 auto; overflow: hidden; }
+.stops-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
 /* ── TOPBAR ── */
 .topbar { display: flex; align-items: center; gap: 10px; padding: 0.9rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.07); background: var(--moss); flex-shrink: 0; }
@@ -181,30 +184,29 @@ button, input { font: inherit; }
 
 <!-- ══ SCREEN: MAP ══ -->
 <div id="screen-map" class="screen active">
-  <div class="topbar">
-    <button class="back-btn" onclick="location.href='../'">← Grįžti</button>
-    <div class="topbar-info">
-      <div class="topbar-eyebrow">Širvintos keliauja</div>
-      <div class="topbar-title">Kernavė</div>
+  <div class="map-fixed">
+    <div class="topbar">
+      <button class="back-btn" onclick="location.href='../'">← Grįžti</button>
+      <div class="topbar-info">
+        <div class="topbar-eyebrow">Širvintos keliauja</div>
+        <div class="topbar-title">Kernavė</div>
+      </div>
+      <span class="topbar-icon">🏰</span>
     </div>
-    <span class="topbar-icon">🏰</span>
-  </div>
-  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-  <div class="progress-label" id="progress-label">0 iš 13 stotelių surinkta • Keliauk laisva seka</div>
-
-  <div class="map-area">
-    <div id="real-map"></div>
-    <div class="map-pill" id="map-pill">👣 0/13</div>
-  </div>
-
-  <div class="map-actions">
-    <button class="btn-sm" onclick="centerOnUser()">📍 Mano vieta</button>
-    <button class="btn-sm" onclick="fitAll()">🗺 Visos stotelės</button>
-    <button class="btn-sm" onclick="resetConfirm()">♻️ Iš naujo</button>
-  </div>
-
-  <div class="stops-list">
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+    <div class="progress-label" id="progress-label">0 iš 13 stotelių surinkta • Keliauk laisva seka</div>
+    <div class="map-area">
+      <div id="real-map"></div>
+      <div class="map-pill" id="map-pill">👣 0/13</div>
+    </div>
+    <div class="map-actions">
+      <button class="btn-sm" onclick="centerOnUser()">📍 Mano vieta</button>
+      <button class="btn-sm" onclick="fitAll()">🗺 Visos stotelės</button>
+      <button class="btn-sm" onclick="resetConfirm()">♻️ Iš naujo</button>
+    </div>
     <div class="region-label">📍 Kernavė · 13 stotelių · keliauk laisva seka</div>
+  </div>
+  <div class="stops-list">
     <div id="stops-list-inner"></div>
   </div>
 </div>
