@@ -13,14 +13,14 @@
 
 <!-- ══ SEO ══ -->
 <title>Širvintos maršrutas – lankytinos vietos ir QR žaidimas · Širvintos keliauja</title>
-<meta name="description" content="Atraskite gražiausias lankytinas vietas Širvintose žaisdami! Skulptūra Širvinta, Briedžių takas, Jaunimo sodas, centrinė aikštė su fontanu. 6 stotelės, QR kodai, nemokama.">
+<meta name="description" content="Atraskite gražiausias lankytinas vietas Širvintose žaisdami! Briedžių takas, skulptūra Širvinta, Wake parkas, centrinė aikštė – 6 stotelės, QR kodai. Nemokama.">
 <meta name="keywords" content="Širvintos lankytinos vietos, ką veikti Širvintose, Briedžių takas, Širvintų tvenkinys, Širvintų maršrutas, turistiniai takai Širvintos">
 <meta name="author" content="Juras Stasiūnas">
 <link rel="canonical" href="https://sirvintoskeliauja.lt/sirvintos/">
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://sirvintoskeliauja.lt/sirvintos/">
 <meta property="og:title" content="Širvintos maršrutas – interaktyvus QR žaidimas po miestą">
-<meta property="og:description" content="Atraskite įdomiausias lankytinas vietas Širvintose žaisdami! Nuo skulptūros prie tvenkinio iki Briedžių tako – 6 stotelės, QR kodai, nemokama pramoga šeimoms.">
+<meta property="og:description" content="Atraskite įdomiausias lankytinas vietas Širvintose! Briedžių takas, skulptūra Širvinta, Wake parkas – 6 stotelės, QR kodai, nemokama pramoga.">
 <meta property="og:image" content="https://sirvintoskeliauja.lt/assets/icons/herbas.png">
 <meta property="og:locale" content="lt_LT">
 <meta property="og:site_name" content="Širvintos keliauja">
@@ -29,7 +29,7 @@
   "@context": "https://schema.org",
   "@type": "TouristTrip",
   "name": "Širvintų miesto maršrutas",
-  "description": "Interaktyvus 6 stotelių QR maršrutas po Širvintų miestą. Skulptūra Širvinta, Briedžių takas, Jaunimo sodas, centrinė aikštė.",
+  "description": "Interaktyvus 6 stotelių QR maršrutas po Širvintų miestą.",
   "url": "https://sirvintoskeliauja.lt/sirvintos/",
   "inLanguage": "lt",
   "isAccessibleForFree": true,
@@ -53,7 +53,7 @@
 <link rel="manifest" href="../manifest.webmanifest">
 <link rel="apple-touch-icon" href="../assets/icons/icon-192.png">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.4/dist/leaflet.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
   --forest: #1a2e1a; --moss: #2d4a2d; --sage: #8fb88f;
@@ -64,11 +64,14 @@
 * { margin: 0; padding: 0; box-sizing: border-box; }
 body { font-family: 'DM Sans', sans-serif; background: var(--forest); color: var(--cream); min-height: 100vh; }
 button, input { font: inherit; }
-.screen { display: none; min-height: 100vh; flex-direction: column; }
+.screen { display: none; flex-direction: column; }
 .screen.active { display: flex; }
+#screen-map { height: 100dvh; height: 100vh; overflow: hidden; }
+.map-fixed { flex: 0 0 auto; overflow: hidden; }
+.stops-list { flex: 1 1 auto; min-height: 0; overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
-/* TOPBAR */
-.topbar { display: flex; align-items: center; gap: 10px; padding: 0.9rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.07); background: var(--moss); flex-shrink: 0; position: sticky; top: 0; z-index: 10; }
+/* ── TOPBAR ── */
+.topbar { display: flex; align-items: center; gap: 10px; padding: 0.9rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.07); background: var(--moss); flex-shrink: 0; }
 .back-btn { background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); color: var(--cream); padding: 5px 10px; border-radius: 10px; cursor: pointer; font-size: 0.85rem; }
 .back-btn:hover { background: rgba(255,255,255,0.12); }
 .topbar-info { flex: 1; }
@@ -76,84 +79,78 @@ button, input { font: inherit; }
 .topbar-title { font-size: 1rem; font-weight: 500; }
 .topbar-icon { font-size: 1.4rem; }
 
-/* PROGRESS */
+/* ── PROGRESS ── */
 .progress-bar-wrap { height: 4px; background: rgba(255,255,255,0.08); flex-shrink: 0; }
 .progress-bar-fill { height: 100%; background: linear-gradient(90deg, var(--amber), var(--gold)); transition: width 0.5s ease; }
 .progress-label { text-align: center; font-size: 0.75rem; color: var(--sage); padding: 0.4rem; background: rgba(0,0,0,0.1); }
 
-/* MAP */
-.map-area { flex-shrink: 0; height: 220px; background: linear-gradient(160deg, #1a2e1a, #243824); position: relative; overflow: hidden; }
+/* ── MAP ── */
+.map-area { flex-shrink: 0; height: clamp(250px, 35vh, 360px); height: clamp(250px, 35dvh, 360px); background: linear-gradient(160deg, #1a2e1a, #243824); position: relative; overflow: hidden; }
 #real-map { width: 100%; height: 100%; }
-.map-overlay { position: absolute; left: 10px; right: 10px; bottom: 10px; background: rgba(10,20,10,0.82); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; padding: 0.6rem 0.8rem; backdrop-filter: blur(6px); z-index: 400; pointer-events: none; }
-.map-overlay-title { font-size: 0.78rem; font-weight: 500; color: var(--gold); }
-.map-overlay-text { font-size: 0.75rem; color: rgba(245,240,232,0.7); margin-top: 2px; }
+.map-pill { position: absolute; left: 10px; bottom: 10px; background: rgba(10,20,10,0.88); border: 1px solid rgba(255,255,255,0.12); border-radius: 20px; padding: 4px 12px; font-size: 0.82rem; font-weight: 500; color: var(--gold); z-index: 400; pointer-events: none; }
 .map-actions { display: flex; gap: 6px; padding: 0.6rem 1rem; background: var(--moss); border-bottom: 1px solid rgba(255,255,255,0.06); flex-wrap: wrap; }
 .btn-sm { padding: 0.45rem 0.8rem; font-size: 0.8rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; color: var(--cream); cursor: pointer; }
 .btn-sm:hover { background: rgba(255,255,255,0.12); }
 
-/* STOPS LIST */
-.stops-list { flex: 1; overflow-y: auto; }
+/* ── STOPS LIST ── */
 .region-label { padding: 0.5rem 1rem 0.25rem; font-size: 0.65rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage); border-bottom: 1px solid rgba(255,255,255,0.05); }
 .stop-item { display: flex; align-items: center; gap: 0.9rem; padding: 0.8rem 1rem; border-bottom: 1px solid rgba(255,255,255,0.04); cursor: pointer; transition: background 0.15s; }
-.stop-item:hover { background: rgba(255,255,255,0.04); }
-.stop-item.collected { background: rgba(99,153,34,0.06); }
+.stop-item:hover:not(.locked) { background: rgba(255,255,255,0.04); }
+.stop-item.locked { opacity: 0.45; cursor: default; }
 .stop-num { width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.78rem; font-weight: 600; flex-shrink: 0; border: 2px solid; transition: all 0.3s; }
 .stop-num.done { background: var(--amber); border-color: var(--gold); color: var(--forest); }
-.stop-num.pending { background: transparent; border-color: rgba(143,184,143,0.4); color: rgba(245,240,232,0.6); }
+.stop-num.next { background: transparent; border-color: var(--gold); color: var(--gold); animation: pulse 2s infinite; }
+.stop-num.pending { background: transparent; border-color: rgba(143,184,143,0.25); color: rgba(245,240,232,0.35); }
+@keyframes pulse { 0%,100%{box-shadow:0 0 0 0 rgba(240,184,64,0.4);}50%{box-shadow:0 0 0 5px rgba(240,184,64,0);} }
 .stop-info { flex: 1; }
 .stop-name { font-weight: 500; font-size: 0.9rem; }
 .stop-hint { font-size: 0.73rem; color: rgba(245,240,232,0.5); margin-top: 1px; }
-.stop-end-icon { font-size: 1.2rem; }
+.stop-end-icon { font-size: 1.1rem; }
 
-/* STOP DETAIL */
+/* ── STOP DETAIL ── */
 #screen-stop { flex-direction: column; }
-.stop-hero { flex-shrink: 0; height: 150px; background: linear-gradient(135deg, var(--moss), #1a3a1a); display: flex; align-items: center; justify-content: center; font-size: 4.5rem; position: relative; }
+.stop-hero { flex-shrink: 0; height: 150px; background: linear-gradient(135deg, var(--moss), #1a3a1a); display: flex; align-items: center; justify-content: center; font-size: 4rem; position: relative; }
 .stop-hero-badge { position: absolute; top: 10px; right: 10px; font-size: 0.7rem; background: rgba(240,184,64,0.15); border: 1px solid rgba(240,184,64,0.3); color: var(--gold); padding: 3px 9px; border-radius: 20px; }
-.stop-body { flex: 1; overflow-y: auto; padding: 1.2rem 1rem; display: flex; flex-direction: column; gap: 0.9rem; }
+.stop-body { flex: 1; overflow-y: auto; padding: 1.2rem 1rem calc(2rem + env(safe-area-inset-bottom)); display: flex; flex-direction: column; gap: 0.9rem; }
 .info-block { background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); border-radius: 14px; padding: 0.9rem 1rem; }
 .info-block-label { font-size: 0.65rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--sage); margin-bottom: 0.4rem; }
 .info-block-text { font-size: 0.88rem; line-height: 1.65; color: rgba(245,240,232,0.88); }
 .fact-block { background: var(--amber-bg); border: 1px solid var(--amber-border); border-radius: 14px; padding: 0.9rem 1rem; }
 .fact-block .info-block-label { color: var(--gold); }
+.fact-block .info-block-text { color: rgba(245,240,232,0.88); }
 .task-block { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 14px; padding: 0.9rem 1rem; }
 .task-block .info-block-label { color: rgba(245,240,232,0.5); }
 .action-row { display: flex; gap: 8px; }
 .btn-action { flex: 1; padding: 0.65rem; font-size: 0.83rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: var(--cream); cursor: pointer; text-align: center; }
 .btn-action:hover { background: rgba(255,255,255,0.1); }
 
-/* CODE */
+/* QR / code */
 .code-wrap { display: flex; flex-direction: column; gap: 8px; }
 .code-row { display: flex; gap: 8px; }
-.code-input { flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(143,184,143,0.25); border-radius: 12px; color: var(--cream); font-size: 1rem; letter-spacing: 0.18em; text-align: center; text-transform: uppercase; outline: none; transition: border-color 0.2s; }
+.code-input { flex: 1; padding: 0.75rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(143,184,143,0.25); border-radius: 12px; color: var(--cream); font-size: 1rem; letter-spacing: 0.03em; text-align: center; outline: none; transition: border-color 0.2s; }
 .code-input:focus { border-color: var(--gold); }
 .code-input.ok { border-color: #4caf50; background: rgba(76,175,80,0.1); }
 .code-input.err { border-color: #f44336; background: rgba(244,67,54,0.1); animation: shake 0.3s; }
 @keyframes shake { 0%,100%{transform:translateX(0);}25%{transform:translateX(-6px);}75%{transform:translateX(6px);} }
 .btn-confirm { padding: 0.75rem 1.2rem; background: linear-gradient(135deg, var(--amber), var(--gold)); border: none; border-radius: 12px; color: var(--forest); font-weight: 700; font-size: 0.88rem; cursor: pointer; }
+.btn-confirm:hover { opacity: 0.9; }
 .btn-qr { padding: 0.65rem; font-size: 0.83rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 12px; color: var(--cream); cursor: pointer; }
+.btn-qr:hover { background: rgba(255,255,255,0.1); }
 .collected-box { background: var(--green-bg); border: 1px solid var(--green-border); border-radius: 14px; padding: 1rem; text-align: center; }
 .collected-title { color: var(--green-text); font-weight: 500; font-size: 0.95rem; }
 .collected-sub { font-size: 0.8rem; color: rgba(143,184,143,0.7); margin-top: 4px; }
-.btn-back-map { display: block; width: 100%; padding: 0.85rem; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1); border-radius: 14px; color: var(--cream); font-size: 0.9rem; cursor: pointer; text-align: center; }
-.btn-back-map:hover { background: rgba(255,255,255,0.1); }
+.btn-next { display: block; width: 100%; padding: 0.85rem; background: linear-gradient(135deg, var(--amber), var(--gold)); border: none; border-radius: 14px; color: var(--forest); font-weight: 700; font-size: 0.95rem; cursor: pointer; text-align: center; }
+.btn-next:hover { opacity: 0.9; }
 
-/* PRIZE */
-#screen-prize { justify-content: center; align-items: center; text-align: center; padding: 2rem; position: relative; overflow: hidden; }
-.confetti-wrap { position: absolute; inset: 0; pointer-events: none; overflow: hidden; }
-.confetti-piece { position: absolute; border-radius: 2px; animation: fall linear infinite; }
-@keyframes fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1;} 100%{transform:translateY(100vh) rotate(720deg);opacity:0;} }
-.prize-content { position: relative; z-index: 2; max-width: 340px; }
-.prize-big-icon { font-size: 5rem; margin-bottom: 0.5rem; animation: float 3s ease-in-out infinite; display: block; }
-@keyframes float { 0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);} }
-.prize-title { font-family: 'Playfair Display', serif; font-size: 2rem; font-weight: 700; color: var(--gold); margin-bottom: 0.4rem; }
-.prize-title-lt { font-family: 'Playfair Display', serif; font-style: italic; font-size: 1.1rem; color: var(--sage); margin-bottom: 1rem; }
-.prize-desc { font-size: 0.92rem; color: rgba(245,240,232,0.75); line-height: 1.7; margin-bottom: 2rem; }
-.prize-share { display: flex; gap: 8px; justify-content: center; margin-bottom: 1.5rem; }
-.btn-share { padding: 0.65rem 1.2rem; background: rgba(255,255,255,0.07); border: 1px solid rgba(255,255,255,0.12); border-radius: 12px; color: var(--cream); font-size: 0.85rem; cursor: pointer; }
-.btn-share:hover { background: rgba(255,255,255,0.12); }
-.btn-again { padding: 0.75rem 2rem; background: linear-gradient(135deg, var(--amber), var(--gold)); border: none; border-radius: 14px; color: var(--forest); font-weight: 700; font-size: 0.95rem; cursor: pointer; }
 
-/* QR SHEET */
+/* ── NAV BTNS ── */
+.nav-btns { display: flex; gap: 8px; margin-top: 4px; }
+.btn-nav-prev { flex: 1; padding: 0.65rem; font-size: 0.83rem; background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.08); border-radius: 12px; color: rgba(245,240,232,0.6); cursor: pointer; }
+.btn-nav-prev:disabled { opacity: 0.25; cursor: default; }
+.btn-nav-next { flex: 1; padding: 0.65rem; font-size: 0.83rem; background: linear-gradient(135deg, var(--amber), var(--gold)); border: none; border-radius: 12px; color: var(--forest); font-weight: 700; cursor: pointer; }
+.btn-nav-next:disabled { opacity: 0.25; cursor: default; background: rgba(255,255,255,0.05); color: rgba(245,240,232,0.4); border: 1px solid rgba(255,255,255,0.08); }
+
+/* ── QR SHEET ── */
 .qr-sheet { position: fixed; inset: 0; z-index: 50; display: none; align-items: flex-end; justify-content: center; background: rgba(0,0,0,0.6); }
 .qr-sheet.open { display: flex; }
 .qr-sheet-card { width: 100%; max-width: 520px; background: var(--moss); border-radius: 18px 18px 0 0; border: 1px solid rgba(255,255,255,0.08); padding: 1rem; }
@@ -163,47 +160,45 @@ button, input { font: inherit; }
 #qr-reader { width: 100%; min-height: 240px; border-radius: 12px; background: #111; overflow: hidden; }
 .qr-help { font-size: 0.78rem; color: rgba(245,240,232,0.6); margin-top: 0.7rem; line-height: 1.5; }
 
-/* TOAST */
-.toast { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%) translateY(140%); z-index: 100; background: rgba(10,20,10,0.92); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 0.8rem 1.1rem; font-size: 0.88rem; max-width: calc(100% - 24px); width: 400px; transition: transform 0.25s ease; text-align: center; }
+/* ── TOAST ── */
+.toast { position: fixed; left: 50%; bottom: 16px; transform: translateX(-50%) translateY(140%); z-index: 100; background: rgba(10,20,10,0.92); border: 1px solid rgba(255,255,255,0.08); border-radius: 14px; padding: 0.8rem 1.1rem; font-size: 0.88rem; max-width: calc(100% - 24px); width: 400px; transition: transform 0.25s ease; }
 .toast.show { transform: translateX(-50%) translateY(0); }
+.hidden { display: none !important; }
+#collected-section { display: flex; flex-direction: column; gap: 8px; }
 </style>
 </head>
 <body>
 
-<!-- ══ MAP SCREEN ══ -->
+<!-- ══ SCREEN: MAP ══ -->
 <div id="screen-map" class="screen active">
-  <div class="topbar">
-    <button class="back-btn" onclick="location.href='../'">← Grįžti</button>
-    <div class="topbar-info">
-      <div class="topbar-eyebrow">Širvintos keliauja</div>
-      <div class="topbar-title">Širvintos</div>
+  <div class="map-fixed">
+    <div class="topbar">
+      <button class="back-btn" onclick="location.href='../'">← Grįžti</button>
+      <div class="topbar-info">
+        <div class="topbar-eyebrow">Širvintos keliauja</div>
+        <div class="topbar-title">Širvintos</div>
+      </div>
+      <span class="topbar-icon">🦌</span>
     </div>
-    <span class="topbar-icon">🦌</span>
-  </div>
-  <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
-  <div class="progress-label" id="progress-label">0 iš 6 stotelių surinkta · rink bet kokia tvarka</div>
-
-  <div class="map-area">
-    <div id="real-map"></div>
-    <div class="map-overlay">
-      <div class="map-overlay-title" id="map-overlay-title">6 stotelės laukia tavęs</div>
-      <div class="map-overlay-text" id="map-overlay-text">Rink bet kokia tvarka – visos stotelės atviros!</div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill" id="progress-bar" style="width:0%"></div></div>
+    <div class="progress-label" id="progress-label">0 iš 6 stotelių surinkta • Keliauk laisva seka</div>
+    <div class="map-area">
+      <div id="real-map"></div>
+      <div class="map-pill" id="map-pill">👣 0/6</div>
     </div>
+    <div class="map-actions">
+      <button class="btn-sm" onclick="centerOnUser()">📍 Mano vieta</button>
+      <button class="btn-sm" onclick="fitAll()">🗺 Visos stotelės</button>
+      <button class="btn-sm" onclick="resetConfirm()">♻️ Iš naujo</button>
+    </div>
+    <div class="region-label">📍 Širvintos · 6 stotelės · keliauk laisva seka</div>
   </div>
-
-  <div class="map-actions">
-    <button class="btn-sm" onclick="centerOnUser()">📍 Mano vieta</button>
-    <button class="btn-sm" onclick="fitAll()">🗺 Visos stotelės</button>
-    <button class="btn-sm" onclick="resetConfirm()">♻️ Iš naujo</button>
-  </div>
-
   <div class="stops-list">
-    <div class="region-label">📍 Širvintos · 6 stotelės · rink bet kokia tvarka</div>
     <div id="stops-list-inner"></div>
   </div>
 </div>
 
-<!-- ══ STOP SCREEN ══ -->
+<!-- ══ SCREEN: STOP ══ -->
 <div id="screen-stop" class="screen">
   <div class="topbar">
     <button class="back-btn" onclick="showScreen('map')">← Širvintos</button>
@@ -222,54 +217,61 @@ button, input { font: inherit; }
   <div class="stop-body">
     <div class="info-block">
       <div class="info-block-label">📍 Apie vietą</div>
-      <div class="info-block-text" id="stop-desc"></div>
+      <div class="info-block-text" id="stop-desc">...</div>
     </div>
     <div class="fact-block">
       <div class="info-block-label">💡 Įdomus faktas</div>
-      <div class="info-block-text" id="stop-fact"></div>
+      <div class="info-block-text" id="stop-fact">...</div>
     </div>
-    <div class="action-row">
-      <button class="btn-action" id="nav-btn">📍 Vykstu ten</button>
-      <button class="btn-action" onclick="openQr()">📷 Skenuoti QR</button>
-    </div>
+    <button class="btn-action" id="nav-btn" style="width:100%">📍 Vykstu ten</button>
     <div class="task-block">
       <div class="info-block-label">🎯 Užduotis</div>
-      <div class="info-block-text" id="stop-task"></div>
+      <div class="info-block-text" id="stop-task">...</div>
     </div>
     <div id="code-section" class="code-wrap">
       <div class="code-row">
-        <input class="code-input" id="code-input" type="text" maxlength="8" placeholder="KODAS" oninput="this.value=this.value.toUpperCase()">
+        <input class="code-input" id="code-input" type="text" maxlength="8" placeholder="Negali nuskaityti QR? Įvesk kodą" oninput="this.value=this.value.toUpperCase()">
         <button class="btn-confirm" onclick="checkCode()">✓</button>
       </div>
       <button class="btn-qr" onclick="openQr()">📷 Skenuoti QR kodą</button>
     </div>
-    <div id="collected-section" style="display:none; flex-direction:column; gap:8px;">
-      <div class="collected-box">
+    <div class="nav-btns" id="nav-btns-section">
+      <button class="btn-nav-prev" id="btn-prev" onclick="navigateStop(-1)">← Ankstesnė</button>
+      <button class="btn-nav-next" id="btn-next-stop" onclick="navigateStop(1)">Kita →</button>
+    </div>
+    <div id="collected-section" class="hidden">
+      <div class="collected-box" style="margin-bottom:0.8rem">
         <div class="collected-title">✅ Stotelė surinkta!</div>
-        <div class="collected-sub" id="collected-sub">Eik į kitą stotelę</div>
+        <div class="collected-sub" id="collected-sub">Tęsk maršrutą</div>
       </div>
-      <button class="btn-back-map" onclick="showScreen('map')">← Grįžti į žemėlapį</button>
+      <button class="btn-next" onclick="showScreen('map')">← Grįžti į žemėlapį</button>
     </div>
   </div>
 </div>
 
-<!-- ══ PRIZE SCREEN ══ -->
-<div id="screen-prize" class="screen">
-  <div class="confetti-wrap" id="confetti-wrap"></div>
-  <div class="prize-content">
-    <span class="prize-big-icon">🦌</span>
-    <h2 class="prize-title">Sveikiname!</h2>
-    <p class="prize-title-lt">„Širvintų Briedis"</p>
-    <p class="prize-desc">Suradai visas 6 Širvintų stoteles ir tapai tikru miesto pažinėju!<br>Nuo skulptūros prie upės iki grojančio fontano – tu perėjai visą Širvintų širdį.</p>
-    <div class="prize-share">
-      <button class="btn-share" onclick="shareResult()">📤 Pasidalink</button>
-      <button class="btn-share" onclick="showScreen('map')">🗺 Grįžti</button>
+<!-- ══ SCREEN: PRIZE ══ -->
+<div id="screen-prize" class="screen" style="justify-content:center;align-items:center;text-align:center;padding:2rem;position:relative;overflow:hidden;">
+  <div id="confetti-wrap" style="position:absolute;inset:0;pointer-events:none;overflow:hidden;"></div>
+  <style>
+    .confetti-piece{position:absolute;border-radius:2px;animation:fall linear infinite;}
+    @keyframes fall{0%{transform:translateY(-20px) rotate(0deg);opacity:1;}100%{transform:translateY(100vh) rotate(720deg);opacity:0;}}
+    .prize-float{animation:pfloat 3s ease-in-out infinite;}
+    @keyframes pfloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+  </style>
+  <div style="position:relative;z-index:2;max-width:340px;">
+    <div style="font-size:5rem;margin-bottom:0.5rem;" class="prize-float">🏆</div>
+    <h2 style="font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;color:#f0b840;margin-bottom:0.4rem;">Sveikiname!</h2>
+    <p style="font-family:'Playfair Display',serif;font-style:italic;font-size:1.1rem;color:#8fb88f;margin-bottom:1rem;">„Širvintų briedis"</p>
+    <p style="font-size:0.92rem;color:rgba(245,240,232,0.75);line-height:1.7;margin-bottom:2rem;">Suradai visas 6 Širvintų stoteles – nuo skulptūros prie upės iki grojančio fontano!<br>Tu esi tikras Širvintų briedis.</p>
+    <div style="display:flex;gap:8px;justify-content:center;margin-bottom:1.5rem;">
+      <button style="padding:0.65rem 1.2rem;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#f5f0e8;font-size:0.85rem;cursor:pointer;" onclick="shareResult()">📤 Pasidalink</button>
+      <button style="padding:0.65rem 1.2rem;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.12);border-radius:12px;color:#f5f0e8;font-size:0.85rem;cursor:pointer;" onclick="showScreen('map')">🗺 Grįžti</button>
     </div>
-    <button class="btn-again" onclick="resetAndStart()">🔄 Pradėti iš naujo</button>
+    <button style="padding:0.75rem 2rem;background:linear-gradient(135deg,#d4872a,#f0b840);border:none;border-radius:14px;color:#1a2e1a;font-weight:700;font-size:0.95rem;cursor:pointer;" onclick="resetAndStart()">🔄 Pradėti iš naujo</button>
   </div>
 </div>
 
-<!-- QR SHEET -->
+<!-- ══ QR SHEET ══ -->
 <div class="qr-sheet" id="qr-sheet">
   <div class="qr-sheet-card">
     <div class="qr-sheet-header">
@@ -288,18 +290,18 @@ button, input { font: inherit; }
 <script>
 const STOPS = [
   {
-    name: 'Poilsio zona prie Širvintų tvenkinio', icon: '🦌', code: 'S001',
+    name: 'Poilsio zona prie tvenkinio', icon: '🦌', code: 'S001',
     lat: 55.04007, lng: 24.96022,
     hint: 'Prie tvenkinio · skulptūra „Širvinta"',
-    desc: 'Poilsio zona prie Širvintų tvenkinio su pėsčiųjų takais, apšvietimu ir mažosios architektūros elementais. Ant šlaito įrengtas amfiteatras, virš vandens – terasa. 1981 m. pastatyta skulptūra „Širvinta" išdidžiai stovi aikštės viduryje.',
-    fact: 'Skulptūros vardas kilęs nuo Širvintos upės, o upės vardas – nuo žodžio „širvis", kuriuo vadindavo briedį dėl jo pilkšvos kailio spalvos.',
+    desc: 'Poilsio zona su pėsčiųjų takais, amfiteatru ir terasa virš vandens. 1981 m. pastatyta skulptūra „Širvinta" išdidžiai stovi aikštės viduryje.',
+    fact: 'Skulptūros vardas kilęs nuo Širvintos upės, o upės vardas – nuo žodžio „širvis", kuriuo vadindavo briedį dėl pilkšvos kailio spalvos.',
     task: 'Prie skulptūros „Širvinta" postamento rask nedidelį ženklą su QR kodu.'
   },
   {
     name: 'Jaunimo sodas', icon: '🌳', code: 'S002',
     lat: 55.03652, lng: 24.96517,
     hint: 'Jaunimo sodas · prie rotondos',
-    desc: 'Žalioji miesto oazė – mėgstama širvintiškių vieta pasivaikščiojimams ir poilsiui. Sode 2024 m. atidengtas paminklas poetui Justinui Marcinkevičiui.',
+    desc: 'Žalioji miesto oazė – mėgstama širvintiškių vieta poilsiui. 2024 m. atidengtas paminklas poetui Justinui Marcinkevičiui.',
     fact: 'Ant rotondos sode įrašytas Justino Marcinkevičiaus eilėraštis – poetas turėjo stiprių ryšių su Širvintų kraštu.',
     task: 'Sode, prie rotondos su eilėraščiu, rask pritvirtintą QR kodą.'
   },
@@ -307,33 +309,33 @@ const STOPS = [
     name: 'Briedžių takas', icon: '🫎', code: 'S003',
     lat: 55.04287, lng: 24.96178,
     hint: 'Palei tvenkinį · pažintinis takas',
-    desc: 'Pažintinis takas palei Širvintų tvenkinį – ideali vieta trumpam atsikvėpti gamtos apsuptyje miesto širdyje. Takas vingiuoja tarp žalių krantų, o jo unikalios skulptūros stebina kiekvieną lankytoją.',
-    fact: 'Briedžių takas įtrauktas į Lietuvos rekordų knygą – jame įrengtos net 28 briedžių skulptūros! Tai vienas didžiausių tokio pobūdžio skulptūrų parkų Lietuvoje.',
+    desc: 'Pažintinis takas palei Širvintų tvenkinį – ideali vieta atsikvėpti gamtos apsuptyje miesto širdyje.',
+    fact: 'Briedžių takas įtrauktas į Lietuvos rekordų knygą – jame įrengtos net 28 briedžių skulptūros!',
     task: 'Pažintiniame take, prie vienos iš briedžių skulptūrų, rask QR kodą.'
   },
   {
     name: 'Wake parkas / Paplūdimys', icon: '🏄', code: 'S004',
     lat: 55.04293, lng: 24.96100,
     hint: 'Prie marių · paplūdimys',
-    desc: 'Modernus aktyvaus laisvalaikio centras prie Širvintų marių. Wake parkas kviečia vandens sporto mėgėjus, o paplūdimys – puiki vieta vasaros poilsiui su šeima.',
-    fact: 'Širvintų marios – užtvenkta Širvintos upė. Tvenkinio pakrantė tapo populiariausia miesto poilsio zona, traukiančia lankytojus iš visos apylinkės.',
+    desc: 'Modernus aktyvaus laisvalaikio centras prie Širvintų marių. Wake parkas ir paplūdimys – puiki vieta vasaros poilsiui.',
+    fact: 'Širvintų marios – užtvenkta Širvintos upė. Tvenkinio pakrantė tapo populiariausia miesto poilsio zona.',
     task: 'Prie wake parko įėjimo arba paplūdimio informaciniame stende rask QR kodą.'
   },
   {
     name: 'Tiltas', icon: '🌉', code: 'S005',
     lat: 55.04277, lng: 24.95927,
     hint: 'Tiltas per Širvintos upę',
-    desc: 'Tiltas per Širvintos upę – ne tik susisiekimo mazgas, bet ir puiki vieta apžvelgti upės slėnį ir miestą. Nuo tilto atsiveria vienas gražiausių Širvintų vaizdų.',
-    fact: 'Širvintos upė yra 90 km ilgio Neries intakas. Jos pakrantėse archeologai aptiko seniausių gyvenviečių pėdsakų – žmonės čia gyveno jau IX–VIII tūkst. pr. Kr.',
+    desc: 'Tiltas per Širvintos upę – puiki vieta apžvelgti upės slėnį ir miestą. Nuo jo atsiveria vienas gražiausių Širvintų vaizdų.',
+    fact: 'Širvintos upė yra 90 km ilgio Neries intakas. Jos pakrantėse žmonės gyveno jau IX–VIII tūkst. pr. Kr.',
     task: 'Ant tilto turėklo, iš upės pusės, rask pritvirtintą briedžio ženklą su QR kodu.'
   },
   {
     name: 'Centrinė aikštė', icon: '🎵', code: 'S006',
     lat: 55.040528, lng: 24.957944,
-    hint: 'Miesto centras · PASKUTINĖ STOTELĖ 🏆',
-    desc: 'Širvintų miesto centrinė aikštė – jauki, patraukli, žalia poilsio ir renginių erdvė, gausi želdynų, gėlynų ir mažosios architektūros elementų. Praturtinta fontanu ir išradingu apšvietimu.',
-    fact: 'Grojantis fontanas – vienas nedaugelio tokių Lietuvos mažesniuose miestuose. Jis tapo tikru Širvintų vizitine kortele ir mėgstamiausia foto vieta.',
-    task: 'PASKUTINIS TAŠKAS! Prie fontano arba centrinės aikštės informacinio stendo rask paskutinį QR kodą ir užbaik maršrutą!'
+    hint: 'Miesto centras · fontanas',
+    desc: 'Širvintų miesto centrinė aikštė – jauki renginių erdvė su želdynais, gėlynais ir grojančiu fontanu.',
+    fact: 'Grojantis fontanas – vienas nedaugelio tokių Lietuvos mažesniuose miestuose. Tikra Širvintų vizitinė kortelė.',
+    task: 'Prie fontano arba centrinės aikštės informacinio stendo rask paskutinį QR kodą!'
   }
 ];
 
@@ -347,7 +349,14 @@ function showScreen(id) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
   window.scrollTo(0, 0);
-  if (id === 'map') { updateUI(); if (!mapReady) initMap(); }
+  if (id === 'map') {
+    updateUI();
+    if (!mapReady) {
+      initMap();
+    } else {
+      setTimeout(() => { if (map) map.invalidateSize(); }, 100);
+    }
+  }
 }
 
 function save() { localStorage.setItem(KEY, JSON.stringify({ collected })); }
@@ -362,45 +371,35 @@ function resetConfirm() {
   if (!confirm('Išvalyti visą Širvintų progresą?')) return;
   collected = new Array(STOPS.length).fill(false);
   localStorage.removeItem(KEY);
-  updateUI(); renderMarkers();
-  toast('Progresas išvalytas.');
+  updateUI(); renderMarkers(); toast('Progresas išvalytas.');
 }
 
 function resetAndStart() {
   collected = new Array(STOPS.length).fill(false);
   localStorage.removeItem(KEY);
   showScreen('map');
+  renderMarkers();
 }
 
 function updateUI() {
   const done = collected.filter(Boolean).length;
-  const total = STOPS.length;
-  document.getElementById('progress-bar').style.width = `${(done / total) * 100}%`;
-
-  if (done === total) {
-    document.getElementById('progress-label').textContent = '🏆 Visos stotelės surinktos!';
-    document.getElementById('map-overlay-title').textContent = 'Maršrutas įveiktas! 🦌';
-    document.getElementById('map-overlay-text').textContent = 'Sveikiname – tu tikras Širvintų pažinėjas!';
-  } else {
-    document.getElementById('progress-label').textContent = `${done} iš ${total} stotelių surinkta · rink bet kokia tvarka`;
-    document.getElementById('map-overlay-title').textContent = `${done} / ${total} stotelių surinkta`;
-    document.getElementById('map-overlay-text').textContent = 'Visos stotelės atviros – rink bet kokia tvarka!';
-  }
-
+  document.getElementById('progress-bar').style.width = `${(done / STOPS.length) * 100}%`;
   const list = document.getElementById('stops-list-inner');
   list.innerHTML = STOPS.map((s, i) => {
     const isDone = collected[i];
-    return `
-      <div class="stop-item ${isDone ? 'collected' : ''}" onclick="openStop(${i})">
-        <div class="stop-num ${isDone ? 'done' : 'pending'}">${isDone ? '✓' : i + 1}</div>
-        <div class="stop-info">
-          <div class="stop-name">${s.name}</div>
-          <div class="stop-hint">${s.hint}</div>
-        </div>
-        <div class="stop-end-icon">${isDone ? '✅' : s.icon}</div>
-      </div>
-    `;
+    return `<div class="stop-item ${isDone ? 'collected' : ''}" onclick="openStop(${i})">
+      <div class="stop-num ${isDone ? 'done' : 'pending'}">${isDone ? '✓' : i + 1}</div>
+      <div class="stop-info"><div class="stop-name">${s.name}</div><div class="stop-hint">${s.hint}</div></div>
+      <div class="stop-end-icon">${isDone ? '✅' : s.icon}</div>
+    </div>`;
   }).join('');
+  if (done === STOPS.length) {
+    document.getElementById('progress-label').textContent = '🏆 Visos stotelės surinktos!';
+    document.getElementById('map-pill').textContent = `👣 ${STOPS.length}/${STOPS.length}`;
+  } else {
+    document.getElementById('progress-label').textContent = `${done} iš ${STOPS.length} stotelių surinkta • Keliauk laisva seka`;
+    document.getElementById('map-pill').textContent = `👣 ${done}/${STOPS.length}`;
+  }
 }
 
 function openStop(i) {
@@ -415,20 +414,19 @@ function openStop(i) {
   document.getElementById('stop-fact').textContent = s.fact;
   document.getElementById('stop-task').textContent = s.task;
   document.getElementById('nav-btn').onclick = () => window.open(`https://www.google.com/maps/dir/?api=1&destination=${s.lat},${s.lng}`, '_blank');
-
   const done = collected[i];
   document.getElementById('code-section').style.display = done ? 'none' : 'flex';
   document.getElementById('code-section').style.flexDirection = 'column';
   const cs = document.getElementById('collected-section');
-  cs.style.display = done ? 'flex' : 'none';
+  cs.classList.toggle('hidden', !done);
   if (done) {
-    const remaining = collected.filter(Boolean).length;
-    document.getElementById('collected-sub').textContent =
-      remaining === STOPS.length ? '🏆 Visos stotelės surinktos!' : `${remaining} iš ${STOPS.length} surinkta`;
+    const doneCount = collected.filter(Boolean).length;
+    document.getElementById('collected-sub').textContent = doneCount === STOPS.length ? '🏆 Visos stotelės surinktos!' : `${doneCount} iš ${STOPS.length} surinkta`;
   }
   const inp = document.getElementById('code-input');
   inp.value = ''; inp.className = 'code-input';
   showScreen('stop');
+  updateNavBtns();
 }
 
 function checkCode() {
@@ -450,9 +448,9 @@ function checkCode() {
       } else {
         document.getElementById('code-section').style.display = 'none';
         const cs = document.getElementById('collected-section');
-        cs.style.display = 'flex';
-        const remaining = collected.filter(Boolean).length;
-        document.getElementById('collected-sub').textContent = `${remaining} iš ${STOPS.length} surinkta – tęsk!`;
+        cs.classList.remove('hidden');
+        const doneCount = collected.filter(Boolean).length;
+        document.getElementById('collected-sub').textContent = `${doneCount} iš ${STOPS.length} surinkta – tęsk!`;
         updateUI();
       }
     }, 700);
@@ -462,10 +460,27 @@ function checkCode() {
   }
 }
 
+
+function navigateStop(dir) {
+  const next = currentStop + dir;
+  if (next < 0 || next >= STOPS.length) return;
+  openStop(next);
+}
+
+function updateNavBtns() {
+  const isFirst = currentStop === 0;
+  const isLast = currentStop === STOPS.length - 1;
+  const prev = document.getElementById('btn-prev');
+  const next = document.getElementById('btn-next-stop');
+  if (prev) prev.disabled = isFirst;
+  if (next) next.disabled = isLast;
+}
+
 function showPrize() { generateConfetti(); showScreen('prize'); }
 
 function generateConfetti() {
   const wrap = document.getElementById('confetti-wrap');
+  if (!wrap) return;
   wrap.innerHTML = '';
   const colors = ['#f0b840','#d4872a','#4a7c4a','#8fb88f','#f5f0e8','#fff'];
   for (let i = 0; i < 60; i++) {
@@ -478,16 +493,26 @@ function generateConfetti() {
 
 function shareResult() {
   if (navigator.share) {
-    navigator.share({ title: 'Širvintos keliauja', text: 'Surinkau visas 6 Širvintų stoteles ir tapau „Širvintų Briedžiu"! 🦌', url: location.href });
-  } else {
-    toast('Nukopijuok nuorodą ir pasidalink!');
-  }
+    navigator.share({ title: 'Širvintos keliauja', text: 'Suradau visas 13 Kernavės stotelių ir tapau „Širvintų briedis"! 🏆', url: location.href });
+  } else { toast('Nukopijuok nuorodą ir pasidalink!'); }
+}
+
+function centerOnUser() {
+  if (!navigator.geolocation) { toast('Naršyklė nepalaiko lokacijos.'); return; }
+  navigator.geolocation.getCurrentPosition(pos => {
+    const { latitude: lat, longitude: lng } = pos.coords;
+    if (map) {
+      if (userMarker) map.removeLayer(userMarker);
+      userMarker = L.circleMarker([lat, lng], { radius: 8, fillColor: '#2d7cf6', fillOpacity: 1, color: '#fff', weight: 2 }).addTo(map).bindPopup('Jūsų vieta');
+      map.setView([lat, lng], 15);
+    }
+    toast('Lokacija atnaujinta.');
+  }, () => toast('Nepavyko gauti lokacijos.'), { enableHighAccuracy: true, timeout: 10000 });
 }
 
 function initMap() {
   mapReady = true;
-  const container = document.getElementById('real-map');
-  map = L.map(container, { zoomControl: true, attributionControl: false }).setView([55.041, 24.961], 14);
+  map = L.map(document.getElementById('real-map'), { zoomControl: true, attributionControl: false }).setView([55.041, 24.961], 14);
 
   const osm = L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19 });
   const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', { maxZoom: 19 });
@@ -514,7 +539,6 @@ function initMap() {
 
   renderMarkers();
   fitAll();
-  centerOnUser(false);
 }
 
 function makeIcon(label, isDone) {
@@ -545,37 +569,28 @@ function fitAll() {
   map.fitBounds(bounds, { padding: [40, 40] });
 }
 
-function centerOnUser(show = true) {
-  if (!navigator.geolocation) { if (show) toast('Naršyklė nepalaiko lokacijos.'); return; }
-  navigator.geolocation.getCurrentPosition(pos => {
-    const { latitude: lat, longitude: lng } = pos.coords;
-    if (map) {
-      if (userMarker) map.removeLayer(userMarker);
-      userMarker = L.circleMarker([lat, lng], { radius: 8, fillColor: '#2d7cf6', fillOpacity: 1, color: '#fff', weight: 2 }).addTo(map).bindPopup('Jūsų vieta');
-      map.setView([lat, lng], 15);
-    }
-    if (show) toast('Lokacija atnaujinta.');
-  }, () => { if (show) toast('Nepavyko gauti lokacijos.'); }, { enableHighAccuracy: true, timeout: 10000 });
-}
-
 async function openQr() {
   if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
     toast('⚠️ Kamera veikia tik per HTTPS. Įvesk kodą ranka.'); return;
   }
-  document.getElementById('qr-sheet').classList.add('open');
   if (typeof Html5Qrcode === 'undefined') { toast('QR biblioteka neužsikrovė. Atnaujink puslapį.'); return; }
+  document.getElementById('qr-sheet').classList.add('open');
   try {
     if (qrScanner) { try { await qrScanner.stop(); } catch(e) {} try { await qrScanner.clear(); } catch(e) {} qrScanner = null; }
     qrScanner = new Html5Qrcode('qr-reader');
     const cameras = await Html5Qrcode.getCameras();
     if (!cameras || cameras.length === 0) { toast('Kamera nerasta. Įvesk kodą ranka.'); closeQr(); return; }
     const cameraId = cameras.length > 1 ? cameras[cameras.length - 1].id : cameras[0].id;
-    await qrScanner.start(cameraId, { fps: 10, qrbox: { width: 220, height: 220 } },
+    await qrScanner.start(
+      cameraId,
+      { fps: 10, qrbox: { width: 220, height: 220 } },
       decoded => { document.getElementById('code-input').value = decoded.trim().toUpperCase(); closeQr(); checkCode(); },
       () => {}
     );
   } catch(e) {
-    const msg = e.toString().toLowerCase().includes('permission') ? '📷 Leisk kamerą naršyklės nustatymuose.' : 'Nepavyko paleisti kameros. Įvesk kodą ranka.';
+    const msg = e.toString().toLowerCase().includes('permission')
+      ? '📷 Leisk kamerą naršyklės nustatymuose ir bandyk dar kartą.'
+      : 'Nepavyko paleisti kameros. Įvesk kodą ranka.';
     toast(msg); closeQr();
   }
 }
@@ -598,6 +613,7 @@ document.addEventListener('DOMContentLoaded', () => {
   load(); updateUI();
   document.getElementById('code-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkCode(); });
   initMap();
+  setTimeout(() => { if (map) map.invalidateSize(); }, 150);
 });
 
 if ('serviceWorker' in navigator) {
