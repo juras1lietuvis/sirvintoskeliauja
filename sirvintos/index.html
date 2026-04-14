@@ -345,7 +345,7 @@ let currentStop = 0;
 let map = null, markers = [], userMarker = null;
 let mapReady = false, qrScanner = null;
 
-function showScreen(id) {
+function showScreen(id, pushHistory = false) {
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   document.getElementById('screen-' + id).classList.add('active');
   window.scrollTo(0, 0);
@@ -356,6 +356,9 @@ function showScreen(id) {
     } else {
       setTimeout(() => { if (map) map.invalidateSize(); }, 100);
     }
+    history.replaceState({ screen: 'map' }, '');
+  } else if (id === 'stop' && pushHistory) {
+    history.pushState({ screen: 'stop' }, '');
   }
 }
 
@@ -402,7 +405,7 @@ function updateUI() {
   }
 }
 
-function openStop(i) {
+function openStop(i, pushHistory = true) {
   currentStop = i;
   const s = STOPS[i];
   document.getElementById('stop-eyebrow').textContent = `Stotelė ${i + 1} iš ${STOPS.length} · Širvintos`;
@@ -425,7 +428,7 @@ function openStop(i) {
   }
   const inp = document.getElementById('code-input');
   inp.value = ''; inp.className = 'code-input';
-  showScreen('stop');
+  showScreen('stop', pushHistory);
   updateNavBtns();
 }
 
@@ -464,7 +467,7 @@ function checkCode() {
 function navigateStop(dir) {
   const next = currentStop + dir;
   if (next < 0 || next >= STOPS.length) return;
-  openStop(next);
+  openStop(next, false);
 }
 
 function updateNavBtns() {
@@ -493,7 +496,7 @@ function generateConfetti() {
 
 function shareResult() {
   if (navigator.share) {
-    navigator.share({ title: 'Širvintos keliauja', text: 'Suradau visas 13 Kernavės stotelių ir tapau „Širvintų briedis"! 🏆', url: location.href });
+    navigator.share({ title: 'Širvintos keliauja', text: 'Surinkau visas 6 Širvintų stoteles ir tapau „Širvintų briedžiu"! 🦌', url: location.href });
   } else { toast('Nukopijuok nuorodą ir pasidalink!'); }
 }
 
@@ -609,8 +612,15 @@ function toast(msg) {
   clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove('show'), 2800);
 }
 
+window.addEventListener('popstate', (e) => {
+  if (!e.state || e.state.screen === 'map') {
+    showScreen('map');
+  }
+});
+
 document.addEventListener('DOMContentLoaded', () => {
   load(); updateUI();
+  history.replaceState({ screen: 'map' }, '');
   document.getElementById('code-input').addEventListener('keydown', e => { if (e.key === 'Enter') checkCode(); });
   initMap();
   setTimeout(() => { if (map) map.invalidateSize(); }, 150);
